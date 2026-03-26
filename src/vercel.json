@@ -1,0 +1,9 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/area-logada",
+      "destination": "/area-logada.html"
+    }
+  ]
+}
