@@ -275,7 +275,7 @@ ul {
 .hero-bg {
   position: absolute;
   inset: 0;
-  background-image: url('../img/hero-bg.webp');
+  background-image: url('img/hero-bg.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -405,7 +405,7 @@ ul {
 .estoque-bg {
   position: absolute;
   inset: 0;
-  background-image: url('../img/abstract-bg.webp');
+  background-image: url('img/abstract-bg.webp');
   background-size: cover;
   background-position: center;
   opacity: 0.08;
@@ -614,7 +614,7 @@ ul {
 .cta-bg {
   position: absolute;
   inset: 0;
-  background-image: url('../img/cta-bg.webp');
+  background-image: url('img/cta-bg.webp');
   background-size: cover;
   background-position: center;
 }

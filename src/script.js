@@ -7,7 +7,7 @@
 
 /* ── Configurações Globais ─────────────────────────────────── */
 const STORAGE_KEY = 'bgcar_estoque';
-const DEFAULT_CAR_IMAGE = '../img/cars-showcase.webp';
+const DEFAULT_CAR_IMAGE = 'img/cars-showcase.webp';
 
 /* ── Navbar: scroll effect ──────────────────────────────────── */
 (function initNavbar() {
