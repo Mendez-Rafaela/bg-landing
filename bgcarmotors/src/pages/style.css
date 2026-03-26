@@ -1,0 +1,742 @@
+/* ============================================================
+   BGCAR Motors — style.css
+   Cor principal: #e21818
+   Fontes: Space Mono (títulos) + Inter (corpo)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap');
+
+/* ── Reset & Base ─────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary:      #e21818;
+  --primary-dark: #b81010;
+  --primary-glow: rgba(226, 24, 24, 0.25);
+  --bg-dark:      #0a0a0a;
+  --bg-card:      #111111;
+  --bg-section:   #0f1623;
+  --text-white:   #ffffff;
+  --text-muted:   #9ca3af;
+  --text-light:   #d1d5db;
+  --border:       rgba(226, 24, 24, 0.3);
+  --font-title:   'Space Mono', monospace;
+  --font-body:    'Inter', sans-serif;
+  --transition:   0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-dark);
+  color: var(--text-white);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+ul {
+  list-style: none;
+}
+
+/* ── Scrollbar ────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+
+/* ── Utilitários ──────────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.section-title {
+  font-family: var(--font-title);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+
+.section-title span {
+  color: var(--primary);
+}
+
+.section-divider {
+  width: 80px;
+  height: 3px;
+  background: var(--primary);
+  margin-top: 1rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-title);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.875rem 2rem;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--text-white);
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--primary-glow);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--text-white);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.btn-outline:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.btn-outline-red {
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.btn-outline-red:hover {
+  background: var(--primary);
+  color: var(--text-white);
+  transform: translateY(-2px);
+}
+
+/* ── Navbar ───────────────────────────────────────────────── */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 1.25rem 0;
+  transition: var(--transition);
+}
+
+.navbar.scrolled {
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(12px);
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(226, 24, 24, 0.2);
+}
+
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-logo {
+  font-family: var(--font-title);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.navbar-nav a {
+  font-family: var(--font-title);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: var(--transition);
+}
+
+.navbar-nav a:hover {
+  color: var(--primary);
+}
+
+.navbar-cta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.navbar-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text-white);
+  transition: var(--transition);
+}
+
+/* Mobile menu */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 10, 10, 0.98);
+  z-index: 999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.mobile-menu.open {
+  display: flex;
+}
+
+.mobile-menu a {
+  font-family: var(--font-title);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-white);
+  transition: var(--transition);
+}
+
+.mobile-menu-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  color: var(--text-white);
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+/* ── Hero Section ─────────────────────────────────────────── */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('../img/hero-bg.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(10, 10, 10, 0.85) 0%, rgba(10, 10, 10, 0.5) 50%, rgba(10, 10, 10, 0.7) 100%);
+}
+
+/* Geometric decorations */
+.hero-geo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.geo-shape {
+  position: absolute;
+  border: 1px solid var(--primary);
+  opacity: 0.5;
+  animation: rotateAndFloat 15s linear infinite;
+}
+
+.geo-shape-1 {
+  width: 150px;
+  height: 150px;
+  top: 15%;
+  left: 5%;
+  animation-duration: 20s;
+}
+
+.geo-shape-2 {
+  width: 100px;
+  height: 100px;
+  top: 25%;
+  right: 10%;
+  animation-duration: 15s;
+  animation-direction: reverse;
+}
+
+.geo-shape-3 {
+  width: 80px;
+  height: 80px;
+  bottom: 20%;
+  left: 12%;
+  animation-duration: 18s;
+}
+
+.geo-shape-4 {
+  width: 120px;
+  height: 120px;
+  bottom: 15%;
+  right: 8%;
+  animation-duration: 25s;
+  animation-direction: reverse;
+}
+
+@keyframes rotateAndFloat {
+  0% {
+    transform: rotate(45deg) translate(0, 0);
+  }
+  25% {
+    transform: rotate(135deg) translate(15px, -15px);
+  }
+  50% {
+    transform: rotate(225deg) translate(0, -30px);
+  }
+  75% {
+    transform: rotate(315deg) translate(-15px, -15px);
+  }
+  100% {
+    transform: rotate(405deg) translate(0, 0);
+  }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 800px;
+  padding: 0 2rem;
+}
+
+.hero-title {
+  font-family: var(--font-title);
+  font-size: clamp(2.5rem, 8vw, 5.5rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title span {
+  color: var(--primary);
+  display: block;
+}
+
+.hero-subtitle {
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  color: var(--text-light);
+  max-width: 500px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.6;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* ── Estoque Section ──────────────────────────────────────── */
+.estoque {
+  position: relative;
+  padding: 6rem 0;
+  background-color: var(--bg-dark);
+  overflow: hidden;
+}
+
+.estoque-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('../img/abstract-bg.webp');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.08;
+}
+
+.estoque-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.estoque-header .section-divider {
+  margin: 1rem auto 1.5rem;
+}
+
+.estoque-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Car Card & Carousel ── */
+.car-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.car-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--border);
+}
+
+.car-card-image {
+  position: relative;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  background: #000;
+}
+
+.car-carousel-container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.car-carousel-slide {
+  min-width: 100%;
+  height: 100%;
+}
+
+.car-carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  opacity: 0;
+  transition: var(--transition);
+  font-size: 1.2rem;
+}
+
+.car-card-image:hover .carousel-nav {
+  opacity: 1;
+}
+
+.carousel-nav:hover {
+  background: var(--primary);
+}
+
+.carousel-nav.prev { left: 10px; }
+.carousel-nav.next { right: 10px; }
+
+.carousel-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 10;
+}
+
+.carousel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: var(--transition);
+}
+
+.carousel-dot.active {
+  background: var(--primary);
+  width: 12px;
+  border-radius: 3px;
+}
+
+.car-price-badge {
+  position: absolute;
+  top: 1.25rem;
+  right: 0;
+  background: var(--primary);
+  color: white;
+  padding: 0.5rem 1.25rem;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 0.85rem;
+  z-index: 15;
+}
+
+.car-card-body {
+  padding: 1.5rem;
+}
+
+.car-card-title {
+  font-size: 1.1rem;
+  margin-bottom: 1.25rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--text-white);
+}
+
+.car-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.car-feature {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Serviços Section ─────────────────────────────────────── */
+.servicos {
+  padding: 6rem 0;
+  background: var(--bg-dark);
+}
+
+.servicos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 4rem;
+}
+
+.servico-card {
+  background: var(--bg-card);
+  padding: 3rem 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: var(--transition);
+}
+
+.servico-card:hover {
+  border-color: var(--border);
+  transform: translateY(-5px);
+}
+
+.servico-icon {
+  font-size: 2.5rem;
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+}
+
+.servico-title {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.servico-desc {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* ── CTA / Contato Section ────────────────────────────────── */
+.cta {
+  position: relative;
+  padding: 8rem 0;
+  text-align: center;
+  overflow: hidden;
+}
+
+.cta-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('../img/cta-bg.webp');
+  background-size: cover;
+  background-position: center;
+}
+
+.cta-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.85);
+}
+
+.cta-content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.cta-title {
+  font-size: clamp(2rem, 5vw, 4rem);
+  margin-bottom: 1.5rem;
+}
+
+.cta-title span { color: var(--primary); }
+
+.cta-subtitle {
+  color: var(--text-light);
+  margin-bottom: 4rem;
+}
+
+.cta-contacts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+}
+
+.contact-card {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 2rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.contact-icon { font-size: 1.5rem; color: var(--primary); margin-bottom: 1rem; }
+.contact-label { font-family: var(--font-title); font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.5rem; }
+.contact-value { font-size: 0.85rem; color: var(--text-white); font-weight: 600; }
+
+/* ── Footer ───────────────────────────────────────────────── */
+.footer {
+  background: #050505;
+  padding: 4rem 0 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+}
+
+.footer-brand-name { font-family: var(--font-title); font-size: 1.5rem; color: var(--primary); margin-bottom: 1rem; }
+.footer-brand-desc { color: var(--text-muted); font-size: 0.85rem; max-width: 300px; }
+.footer-col-title { font-size: 0.75rem; color: var(--text-white); margin-bottom: 1.5rem; text-transform: uppercase; }
+.footer-links a { font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.75rem; transition: var(--transition); }
+.footer-links a:hover { color: var(--primary); }
+
+.social-links { display: flex; gap: 0.75rem; }
+.social-btn { width: 36px; height: 36px; background: rgba(255, 255, 255, 0.05); display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+.social-btn:hover { background: var(--primary); color: white; }
+
+.footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 2rem; display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); }
+
+/* ── Galeria na Área Logada ── */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin-top: 1.5rem;
+}
+
+.gallery-item {
+  position: relative;
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #000;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-item-remove {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  z-index: 5;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .estoque-grid, .servicos-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .navbar-nav, .navbar-cta { display: none; }
+  .navbar-toggle { display: flex; }
+  .estoque-grid, .servicos-grid { grid-template-columns: 1fr; }
+  .cta-contacts { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+}

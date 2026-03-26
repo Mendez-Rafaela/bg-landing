@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>BGCAR Motors — Acelere sua Conquista</title>
+  <meta name="description" content="Compra, venda e troca de veículos usados. Negócios com confiança. A força do seu próximo carro!" />
+  <meta name="theme-color" content="#0a0a0a" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="BGCAR Motors — Acelere sua Conquista" />
+  <meta property="og:description" content="Compra, venda e troca de veículos usados com confiança." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://bgcarmotors.com.br/" />
+
+  <!-- Favicon placeholder -->
+  <link rel="icon" type="image/x-icon" href="../img/logo.jpeg" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       NAVBAR
+  ══════════════════════════════════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <!-- Logo -->
+      <a href="index.html" class="navbar-logo">
+        BGCAR
+      </a>
+
+      <!-- Desktop Nav -->
+      <ul class="navbar-nav">
+        <li><a href="#estoque">Estoque</a></li>
+        <li><a href="#servicos">Serviços</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+
+      <!-- Desktop CTA -->
+      <div class="navbar-cta">
+        <a href="https://wa.me/5511999999999?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20carros%20disponíveis."
+           class="btn btn-primary" target="_blank" rel="noopener">
+          &#128172; Fale Conosco
+        </a>
+      </div>
+
+      <!-- Mobile Toggle -->
+      <button class="navbar-toggle" id="navToggle" aria-label="Abrir menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Fechar menu">&times;</button>
+    <a href="#estoque" class="mobile-link">Estoque</a>
+    <a href="#servicos" class="mobile-link">Serviços</a>
+    <a href="#contato" class="mobile-link">Contato</a>
+    <a href="https://wa.me/5511999999999?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20carros%20disponíveis."
+       class="btn btn-primary" target="_blank" rel="noopener">
+      &#128172; Fale Conosco
+    </a>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       HERO SECTION
+  ══════════════════════════════════════════════════════════ -->
+  <section class="hero" id="hero">
+    <!-- Background -->
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+
+    <!-- Geometric decorations (Animated Diamonds) -->
+    <div class="hero-geo">
+      <div class="geo-shape geo-shape-1"></div>
+      <div class="geo-shape geo-shape-2"></div>
+      <div class="geo-shape geo-shape-3"></div>
+      <div class="geo-shape geo-shape-4"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="hero-content">
+      <h1 class="hero-title fade-in">
+        ACELERE SUA
+        <span>CONQUISTA</span>
+      </h1>
+      <p class="hero-subtitle fade-in delay-1">
+        Compra, venda e troca de veículos usados com confiança.
+        Negócios inteligentes, seguros e simplificados.
+      </p>
+      <div class="hero-actions fade-in delay-2">
+        <a href="https://wa.me/5511999999999?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20carros%20disponíveis."
+           class="btn btn-primary" target="_blank" rel="noopener">
+          &#128172; Fale Conosco
+        </a>
+        <a href="#estoque" class="btn btn-outline">
+          Ver Estoque
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       ESTOQUE SECTION
+  ══════════════════════════════════════════════════════════ -->
+  <section class="estoque" id="estoque">
+    <div class="estoque-bg"></div>
+
+    <div class="container">
+      <!-- Header -->
+      <div class="estoque-header fade-in">
+        <h2 class="section-title">
+          ESTOQUE<br><span>PREMIUM</span>
+        </h2>
+        <div class="section-divider"></div>
+        <p class="estoque-subtitle">
+          Seleção exclusiva de veículos seminovos e usados com garantia de qualidade
+        </p>
+      </div>
+
+      <!-- Grid de carros dinâmico -->
+      <div class="estoque-grid" id="estoqueGrid">
+        <!-- Preenchido dinamicamente pelo script.js -->
+      </div><!-- /estoque-grid -->
+
+      <!-- Ver todos -->
+      <div class="estoque-footer fade-in" style="text-align: center; margin-top: 4rem;">
+        <a href="https://wa.me/5511999999999?text=Olá!%20Gostaria%20de%20ver%20todo%20o%20estoque%20disponível."
+           class="btn btn-outline-red" target="_blank" rel="noopener">
+          VER TODOS OS CARROS
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       SERVIÇOS SECTION
+  ══════════════════════════════════════════════════════════ -->
+  <section class="servicos" id="servicos">
+    <div class="container">
+      <!-- Header -->
+      <div class="servicos-header fade-in-left">
+        <h2 class="section-title">
+          NOSSOS<br><span>SERVIÇOS</span>
+        </h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <!-- Grid -->
+      <div class="servicos-grid">
+
+        <!-- Compra -->
+        <div class="servico-card fade-in delay-1">
+          <div class="servico-icon">&#36;</div>
+          <h3 class="servico-title">COMPRA</h3>
+          <p class="servico-desc">
+            Avaliação gratuita e pagamento imediato para seu veículo usado.
+          </p>
+        </div>
+
+        <!-- Venda -->
+        <div class="servico-card fade-in delay-2">
+          <div class="servico-icon">&#8599;</div>
+          <h3 class="servico-title">VENDA</h3>
+          <p class="servico-desc">
+            Acesso a clientes qualificados e melhor preço para seu carro.
+          </p>
+        </div>
+
+        <!-- Troca -->
+        <div class="servico-card fade-in delay-3">
+          <div class="servico-icon">&#9889;</div>
+          <h3 class="servico-title">TROCA</h3>
+          <p class="servico-desc">
+            Troque seu veículo por outro com as melhores taxas do mercado.
+          </p>
+        </div>
+
+      </div><!-- /servicos-grid -->
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       CTA / CONTATO SECTION
+  ══════════════════════════════════════════════════════════ -->
+  <section class="cta" id="contato">
+    <div class="cta-bg"></div>
+    <div class="cta-overlay"></div>
+
+    <div class="container">
+      <div class="cta-content">
+        <h2 class="cta-title fade-in">
+          PRONTO PARA
+          <span>ACELERAR?</span>
+        </h2>
+        <p class="cta-subtitle fade-in delay-1">
+          Entre em contato com nosso time e descubra como podemos ajudar
+          você a encontrar o carro perfeito.
+        </p>
+
+        <!-- Contact cards -->
+        <div class="cta-contacts fade-in delay-2">
+          <a href="https://wa.me/5511999999999?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20carros%20disponíveis."
+             class="contact-card" target="_blank" rel="noopener">
+            <div class="contact-icon">&#128172;</div>
+            <div class="contact-label">WHATSAPP</div>
+            <div class="contact-value">Clique aqui</div>
+          </a>
+          <a href="tel:+5511999999999" class="contact-card">
+            <div class="contact-icon">&#128222;</div>
+            <div class="contact-label">TELEFONE</div>
+            <div class="contact-value">+55 11 99999-9999</div>
+          </a>
+          <div class="contact-card">
+            <div class="contact-icon">&#128205;</div>
+            <div class="contact-label">ENDEREÇO</div>
+            <div class="contact-value">Avenida Guarapiranga, 1955 — SP</div>
+          </div>
+        </div>
+
+        <!-- CTA Button -->
+        <div class="fade-in delay-3">
+          <a href="https://wa.me/5511999999999?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20carros%20disponíveis."
+             class="btn btn-primary" target="_blank" rel="noopener">
+            &#128172; FALE CONOSCO AGORA
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <!-- Brand -->
+        <div>
+          <div class="footer-brand-name">BGCAR</div>
+          <p class="footer-brand-desc">
+            A força do seu próximo carro. Compra, venda e troca com confiança.
+          </p>
+        </div>
+
+        <!-- Serviços -->
+        <div>
+          <h4 class="footer-col-title">SERVIÇOS</h4>
+          <ul class="footer-links">
+            <li><a href="#servicos">Comprar</a></li>
+            <li><a href="#servicos">Vender</a></li>
+            <li><a href="#servicos">Trocar</a></li>
+            <li><a href="#estoque">Estoque</a></li>
+          </ul>
+        </div>
+
+        <!-- Empresa -->
+        <div>
+          <h4 class="footer-col-title">EMPRESA</h4>
+          <ul class="footer-links">
+            <li><a href="#hero">Sobre</a></li>
+            <li><a href="#contato">Contato</a></li>
+          </ul>
+        </div>
+
+        <!-- Redes Sociais -->
+        <div>
+          <h4 class="footer-col-title">REDES SOCIAIS</h4>
+          <div class="social-links">
+            <a href="https://wa.me/5511999999999" class="social-btn" target="_blank" rel="noopener" aria-label="WhatsApp">
+              &#128172;
+            </a>
+          </div>
+        </div>
+
+      </div><!-- /footer-grid -->
+
+      <div class="footer-bottom">
+        <p class="footer-copy">
+          &copy; 2026 BGCAR Motors. Todos os direitos reservados.
+        </p>
+        <p class="footer-dev">
+          Desenvolvido com &#9889; para você
+        </p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- JS -->
+  <script src="../js/script.js"></script>
+</body>
+</html>
