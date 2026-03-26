@@ -740,3 +740,38 @@ ul {
   .cta-contacts { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
 }
+
+/* ── Estilos do Logo ─────────────────────────────────────── */
+.logo-img {
+  height: 45px;      /* Altura padrão na navbar */
+  width: auto;       /* Mantém a proporção original */
+  display: block;
+  transition: 0.3s;  /* Transição suave ao rolar a página */
+}
+
+/* Diminui o logo quando a navbar encolhe (scroll) */
+.scrolled .logo-img {
+  height: 38px;
+}
+
+/* Tamanho do logo no rodapé */
+.footer-logo-img {
+  height: 50px;
+  width: auto;
+  margin-bottom: 1.5rem;
+}
+
+/* Tamanho do logo na tela de login */
+.login-logo-img {
+  max-width: 180px;
+  height: auto;
+  margin: 0 auto 1.5rem;
+  display: block;
+}
+
+/* Tamanho do logo no menu lateral (painel) */
+.sidebar-logo-img {
+  height: 40px;
+  width: auto;
+  margin-bottom: 0.5rem;
+}
