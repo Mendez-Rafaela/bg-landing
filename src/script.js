@@ -1,208 +1,169 @@
-/**
- * BGCAR Motors — script.js
- * Interações da landing page e Gestão Dinâmica de Estoque com Carrossel e campo Cor
- */
+/* ============================================================
+   BGCAR Motors — script.js (Versão Supabase)
+   ============================================================ */
 
-'use strict';
+// CONFIGURAÇÃO DO SUPABASE (O usuário preencherá no README)
+const SUPABASE_URL = 'https://exbitanikpzhepvdxszr.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV4Yml0YW5pa3B6aGVwdmR4c3pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MDUwODMsImV4cCI6MjA5MTA4MTA4M30.FPKfSdLNTpz6VAm07FY_H0rxrNAmuGG09YHmIU1ByCc';
 
-/* ── Configurações Globais ─────────────────────────────────── */
-const STORAGE_KEY = 'bgcar_estoque';
-const DEFAULT_CAR_IMAGE = 'img/cars-showcase.webp';
+// Inicializa o cliente Supabase se as chaves existirem
+let supabaseClient = null;
 
-/* ── Navbar: scroll effect ──────────────────────────────────── */
-(function initNavbar() {
+if (SUPABASE_URL && SUPABASE_KEY) {
+  supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initNavbar();
+  initMobileMenu();
+  initHeroAnimations();
+  
+  // Detecta qual página estamos
+  if (document.getElementById('estoqueGrid')) {
+    loadGlobalEstoque();
+  }
+});
+
+/* ── Navbar Scroll ────────────────────────────────────────── */
+function initNavbar() {
   const navbar = document.getElementById('navbar');
-  if (!navbar) return;
-
-  function onScroll() {
+  window.addEventListener('scroll', () => {
     if (window.scrollY > 50) {
       navbar.classList.add('scrolled');
     } else {
       navbar.classList.remove('scrolled');
     }
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll(); 
-})();
-
-
-/* ── Mobile Menu ────────────────────────────────────────────── */
-(function initMobileMenu() {
-  const toggle      = document.getElementById('navToggle');
-  const menu        = document.getElementById('mobileMenu');
-  const closeBtn    = document.getElementById('mobileMenuClose');
-  const mobileLinks = document.querySelectorAll('.mobile-link');
-
-  if (!toggle || !menu) return;
-
-  function openMenu() {
-    menu.classList.add('open');
-    toggle.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeMenu() {
-    menu.classList.remove('open');
-    toggle.classList.remove('active');
-    document.body.style.overflow = '';
-  }
-
-  toggle.addEventListener('click', openMenu);
-  if (closeBtn) closeBtn.addEventListener('click', closeMenu);
-
-  mobileLinks.forEach(function (link) {
-    link.addEventListener('click', closeMenu);
   });
+}
 
-  menu.addEventListener('click', function (e) {
-    if (e.target === menu) closeMenu();
+/* ── Menu Mobile ─────────────────────────────────────────── */
+function initMobileMenu() {
+  const toggle = document.getElementById('mobileToggle');
+  const menu = document.getElementById('mobileMenu');
+  const close = document.getElementById('mobileClose');
+  const links = menu.querySelectorAll('a');
+
+  toggle.addEventListener('click', () => menu.classList.add('open'));
+  close.addEventListener('click', () => menu.classList.remove('open'));
+  links.forEach(link => {
+    link.addEventListener('click', () => menu.classList.remove('open'));
   });
-})();
+}
 
-
-/* ── Smooth scroll for anchor links ────────────────────────── */
-(function initSmoothScroll() {
-  document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
-    anchor.addEventListener('click', function (e) {
-      const target = document.querySelector(this.getAttribute('href'));
-      if (!target) return;
-      e.preventDefault();
-      const navbarHeight = document.getElementById('navbar')
-        ? document.getElementById('navbar').offsetHeight
-        : 0;
-      const top = target.getBoundingClientRect().top + window.scrollY - navbarHeight;
-      window.scrollTo({ top: top, behavior: 'smooth' });
-    });
+/* ── Animações Hero ──────────────────────────────────────── */
+function initHeroAnimations() {
+  const shapes = document.querySelectorAll('.geo-shape');
+  shapes.forEach((shape, index) => {
+    shape.style.animationDelay = `${index * 2}s`;
   });
-})();
+}
 
-
-/* ── Estoque Dinâmico (Carregamento no Index) ──────────────── */
-function loadEstoque() {
-  const container = document.getElementById('estoqueGrid');
-  if (!container) return;
-
-  let cars = [];
-  try {
-    cars = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-  } catch (e) { cars = []; }
-
-  if (cars.length === 0) {
-    container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);">Nenhum veículo em estoque no momento.</div>';
+/* ── Carregar Estoque do Supabase (Visível para Todos) ────── */
+async function loadGlobalEstoque() {
+  const grid = document.getElementById('estoqueGrid');
+  
+  // Se não houver Supabase configurado, avisa o usuário
+  if (!supabase) {
+    grid.innerHTML = `<p style="text-align: center; grid-column: 1/-1; color: #e21818;">
+      Erro: Supabase não configurado. Siga o guia no README para ativar o estoque real.
+    </p>`;
     return;
   }
 
-  const disponiveis = cars.filter(car => car.status !== 'Vendido');
+  try {
+    const { data: cars, error } = await supabase
+      .from('cars')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-  container.innerHTML = disponiveis.map((car, index) => {
-    // Preparar lista de imagens (se for string única, converter para array)
-    let images = [];
-    if (Array.isArray(car.imagens) && car.imagens.length > 0) {
-      images = car.imagens;
-    } else if (car.imagem) {
-      images = [car.imagem];
-    } else {
-      images = [DEFAULT_CAR_IMAGE];
+    if (error) throw error;
+
+    if (!cars || cars.length === 0) {
+      grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: var(--text-muted);">Nenhum veículo no estoque no momento.</p>';
+      return;
     }
 
-    const hasMultiple = images.length > 1;
+    grid.innerHTML = '';
+    cars.forEach(car => {
+      grid.appendChild(createCarCard(car));
+    });
+  } catch (err) {
+    console.error('Erro ao carregar estoque:', err);
+    grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: var(--text-muted);">Erro ao carregar veículos.</p>';
+  }
+}
 
-    return `
-      <div class="car-card fade-in visible" style="transition-delay: ${index * 0.1}s" data-id="${car.id}">
-        <div class="car-card-image">
-          <div class="car-carousel-container" id="carousel-${car.id}">
-            ${images.map(img => `
-              <div class="car-carousel-slide">
-                <img src="${img}" alt="${car.marca} ${car.modelo}" loading="lazy" />
-              </div>
-            `).join('')}
-          </div>
-          
-          ${hasMultiple ? `
-            <button class="carousel-nav prev" onclick="moveCarousel('${car.id}', -1)">&#10094;</button>
-            <button class="carousel-nav next" onclick="moveCarousel('${car.id}', 1)">&#10095;</button>
-            <div class="carousel-dots" id="dots-${car.id}">
-              ${images.map((_, i) => `<span class="carousel-dot ${i === 0 ? 'active' : ''}" onclick="setCarousel('${car.id}', ${i})"></span>`).join('')}
-            </div>
-          ` : ''}
-          
-          <span class="car-price-badge">R$ ${Number(car.preco).toLocaleString('pt-BR')}</span>
-        </div>
-        <div class="car-card-body">
-          <h3 class="car-card-title">${car.marca} ${car.modelo}</h3>
-          <ul class="car-features">
-            <li class="car-feature">Ano: ${car.ano || '—'}</li>
-            <li class="car-feature">Cor: ${car.cor || '—'}</li>
-            <li class="car-feature">Câmbio: ${car.cambio || '—'}</li>
-            <li class="car-feature">Placa: Final ${car.placa || '—'}</li>
-            <li class="car-feature">KM: ${car.km ? Number(car.km).toLocaleString('pt-BR') : '—'}</li>
-          </ul>
-          <a href="https://wa.me/5511999999999?text=Olá! Tenho interesse no ${car.marca} ${car.modelo} (${car.ano})."
-             class="btn btn-primary" target="_blank" rel="noopener" style="width:100%; justify-content:center;">
-            &#128172; CONSULTAR
-          </a>
-        </div>
+/* ── Criar Card de Carro com Carrossel ─────────────────────── */
+function createCarCard(car) {
+  const card = document.createElement('div');
+  card.className = 'car-card';
+  
+  // Garantir que fotos seja um array
+  const photos = Array.isArray(car.photos) ? car.photos : (car.photos ? JSON.parse(car.photos) : []);
+  const hasMultiple = photos.length > 1;
+
+  let carouselHTML = '';
+  photos.forEach((photo, idx) => {
+    carouselHTML += `
+      <div class="car-carousel-slide">
+        <img src="${photo}" alt="${car.model}" loading="lazy">
       </div>
     `;
-  }).join('');
+  });
+
+  if (photos.length === 0) {
+    carouselHTML = `<div class="car-carousel-slide"><img src="img/cars-showcase.webp" alt="Sem foto"></div>`;
+  }
+
+  card.innerHTML = `
+    <div class="car-card-image">
+      <div class="car-carousel-container" style="transform: translateX(0%)">
+        ${carouselHTML}
+      </div>
+      ${hasMultiple ? `
+        <button class="carousel-nav prev" onclick="moveCarousel(this, -1)">&#10094;</button>
+        <button class="carousel-nav next" onclick="moveCarousel(this, 1)">&#10095;</button>
+        <div class="carousel-dots">
+          ${photos.map((_, i) => `<span class="carousel-dot ${i === 0 ? 'active' : ''}"></span>`).join('')}
+        </div>
+      ` : ''}
+      <div class="car-price-badge">R$ ${parseFloat(car.price).toLocaleString('pt-BR')}</div>
+    </div>
+    <div class="car-card-body">
+      <h3 class="car-card-title">${car.model}</h3>
+      <div class="car-features">
+        <div class="car-feature"><i class="far fa-calendar-alt"></i> ${car.year}</div>
+        <div class="car-feature"><i class="fas fa-palette"></i> ${car.color || 'N/A'}</div>
+        <div class="car-feature"><i class="fas fa-cog"></i> ${car.transmission}</div>
+        <div class="car-feature"><i class="fas fa-tachometer-alt"></i> ${car.km} km</div>
+        <div class="car-feature"><i class="fas fa-id-card"></i> Placa: ${car.plate || 'N/A'}</div>
+      </div>
+      <a href="https://wa.me/551123641590?text=Olá, tenho interesse no ${car.model} (${car.year})" target="_blank" class="btn btn-primary" style="width: 100%; justify-content: center;">
+        TENHO INTERESSE
+      </a>
+    </div>
+  `;
+
+  return card;
 }
 
-/* ── Lógica do Carrossel ── */
-const carousels = {};
+/* ── Lógica do Carrossel ───────────────────────────────────── */
+window.moveCarousel = function(btn, direction) {
+  const container = btn.parentElement.querySelector('.car-carousel-container');
+  const slides = container.querySelectorAll('.car-carousel-slide');
+  const dots = btn.parentElement.querySelectorAll('.carousel-dot');
+  
+  let currentIndex = parseInt(container.dataset.index || 0);
+  currentIndex += direction;
 
-window.moveCarousel = function(carId, direction) {
-  if (!carousels[carId]) carousels[carId] = 0;
-  
-  const container = document.getElementById(`carousel-${carId}`);
-  const slides = container.children.length;
-  
-  carousels[carId] = (carousels[carId] + direction + slides) % slides;
-  updateCarouselUI(carId);
+  if (currentIndex >= slides.length) currentIndex = 0;
+  if (currentIndex < 0) currentIndex = slides.length - 1;
+
+  container.style.transform = `translateX(-${currentIndex * 100}%)`;
+  container.dataset.index = currentIndex;
+
+  // Atualiza dots
+  dots.forEach((dot, i) => {
+    dot.classList.toggle('active', i === currentIndex);
+  });
 };
-
-window.setCarousel = function(carId, index) {
-  carousels[carId] = index;
-  updateCarouselUI(carId);
-};
-
-function updateCarouselUI(carId) {
-  const index = carousels[carId];
-  const container = document.getElementById(`carousel-${carId}`);
-  const dots = document.getElementById(`dots-${carId}`);
-  
-  if (container) {
-    container.style.transform = `translateX(-${index * 100}%)`;
-  }
-  
-  if (dots) {
-    const dotElements = dots.children;
-    for (let i = 0; i < dotElements.length; i++) {
-      dotElements[i].classList.toggle('active', i === index);
-    }
-  }
-}
-
-// Chamar ao carregar a página
-document.addEventListener('DOMContentLoaded', loadEstoque);
-
-
-/* ── Intersection Observer: fade-in animations ──────────────── */
-(function initFadeIn() {
-  const elements = document.querySelectorAll('.fade-in, .fade-in-left');
-  if (!elements.length) return;
-
-  const observer = new IntersectionObserver(
-    function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.1, rootMargin: '0px 0px -20px 0px' }
-  );
-
-  elements.forEach(function (el) { observer.observe(el); });
-})();

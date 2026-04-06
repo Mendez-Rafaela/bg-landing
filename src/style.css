@@ -132,8 +132,7 @@ ul {
 .btn-outline-red {
   background: transparent;
   color: var(--primary);
-  border: 2px solid #ff2a2a;
-  opacity: 0.9;
+  border: 1px solid var(--primary);
 }
 
 .btn-outline-red:hover {
@@ -274,11 +273,11 @@ ul {
 }
 
 .hero-bg {
-  position:absolute;
+  position: absolute;
   inset: 0;
   background-image: url('img/hero-bg.webp');
   background-size: cover;
-  background-position: center 25%;
+  background-position: center;
   background-repeat: no-repeat;
 }
 
@@ -286,24 +285,6 @@ ul {
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, rgba(10, 10, 10, 0.85) 0%, rgba(10, 10, 10, 0.5) 50%, rgba(10, 10, 10, 0.7) 100%);
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 120px;
-
-  background: linear-gradient(
-    to bottom,
-    rgba(10, 10, 10, 0) 0%,
-    rgba(10, 10, 10, 0.8) 70%,
-    #0a0a0a 100%
-  );
-
-  z-index: 1;
 }
 
 /* Geometric decorations */
@@ -317,7 +298,7 @@ ul {
 
 .geo-shape {
   position: absolute;
-  border: 3px solid var(--primary);
+  border: 1px solid var(--primary);
   opacity: 0.5;
   animation: rotateAndFloat 15s linear infinite;
 }
@@ -415,10 +396,10 @@ ul {
 
 /* ── Estoque Section ──────────────────────────────────────── */
 .estoque {
-  margin-top: -30px;
-  padding-top: 5rem;
   position: relative;
-  z-index: 2;
+  padding: 6rem 0;
+  background-color: var(--bg-dark);
+  overflow: hidden;
 }
 
 .estoque-bg {
@@ -762,25 +743,22 @@ ul {
 
 /* ── Estilos do Logo ─────────────────────────────────────── */
 .logo-img {
-  height: 45px;      /* Altura padrão na navbar */
-  width: auto;       /* Mantém a proporção original */
+  height: 45px;
+  width: auto;
   display: block;
-  transition: 0.3s;  /* Transição suave ao rolar a página */
+  transition: var(--transition);
 }
 
-/* Diminui o logo quando a navbar encolhe (scroll) */
 .scrolled .logo-img {
   height: 38px;
 }
 
-/* Tamanho do logo no rodapé */
 .footer-logo-img {
   height: 50px;
   width: auto;
   margin-bottom: 1.5rem;
 }
 
-/* Tamanho do logo na tela de login */
 .login-logo-img {
   max-width: 180px;
   height: auto;
@@ -788,9 +766,50 @@ ul {
   display: block;
 }
 
-/* Tamanho do logo no menu lateral (painel) */
 .sidebar-logo-img {
   height: 40px;
   width: auto;
   margin-bottom: 0.5rem;
+}
+
+/* ── Estilos das Redes Sociais no Footer ─────────────────── */
+.social-links {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.social-btn {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.social-btn.instagram:hover {
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+  border-color: transparent;
+  transform: translateY(-5px) scale(1.1);
+  box-shadow: 0 5px 15px rgba(214, 36, 159, 0.4);
+}
+
+.social-btn.whatsapp:hover {
+  background: #25d366;
+  border-color: transparent;
+  transform: translateY(-5px) scale(1.1);
+  box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+}
+
+.social-btn.admin-lock:hover {
+  background: var(--primary);
+  border-color: transparent;
+  transform: translateY(-5px) scale(1.1);
+  box-shadow: 0 5px 15px rgba(226, 24, 24, 0.4);
 }

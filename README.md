@@ -1,10 +1,7 @@
-# BGCAR Motors — Landing Page
-
+BGCAR Motors — Landing Page
 Site institucional da BGCAR Motors em HTML, CSS e JavaScript puro.
 
-## Estrutura de Arquivos
-
-```
+Estrutura de Arquivos
 BGCARMOTORS-LANDING/
 └── src/
     ├── img/
@@ -20,43 +17,30 @@ BGCARMOTORS-LANDING/
         ├── index.html         ← Landing page principal
         └── style.css          ← Estilos globais
 README.md
-```
+Domínios
+Página	URL
+Landing Page	https://bgcarmotors.com.br/
+Área Logada	https://bgcarmotors.com.br/area-logada
+Cores
+Token	Valor	Uso
+--primary	#e21818	Cor principal (vermelho)
+--primary-dark	#b81010	Hover / estados ativos
+--bg-dark	#0a0a0a	Fundo geral
+--bg-section	#0f1623	Fundo de seções alternadas
+Fontes
+Space Mono — Títulos, labels e botões
+Inter — Corpo de texto
+Área Logada
+Acesse area-logada.html para o portal de gestão de estoque.
 
-## Domínios
+Credenciais de demonstração:
 
-| Página        | URL                                      |
-|---------------|------------------------------------------|
-| Landing Page  | `https://bgcarmotors.com.br/`            |
-| Área Logada   | `https://bgcarmotors.com.br/area-logada` |
+Usuário: admin
+Senha: bgcar2026
+Atenção: Antes de publicar em produção, implemente autenticação segura no servidor. As credenciais acima são apenas para demonstração local.
 
-## Cores
-
-| Token           | Valor     | Uso                        |
-|-----------------|-----------|----------------------------|
-| `--primary`     | `#e21818` | Cor principal (vermelho)   |
-| `--primary-dark`| `#b81010` | Hover / estados ativos     |
-| `--bg-dark`     | `#0a0a0a` | Fundo geral                |
-| `--bg-section`  | `#0f1623` | Fundo de seções alternadas |
-
-## Fontes
-
-- **Space Mono** — Títulos, labels e botões
-- **Inter** — Corpo de texto
-
-## Área Logada
-
-Acesse `area-logada.html` para o portal de gestão de estoque.
-
-**Credenciais de demonstração:**
-- Usuário: `admin`
-- Senha: `bgcar2026`
-
-> **Atenção:** Antes de publicar em produção, implemente autenticação segura no servidor.
-> As credenciais acima são apenas para demonstração local.
-
-## Tecnologias
-
-- HTML5 semântico
-- CSS3 (variáveis, grid, flexbox, animações)
-- JavaScript ES6+ (sem dependências externas)
-- Google Fonts (Space Mono + Inter)
+Tecnologias
+HTML5 semântico
+CSS3 (variáveis, grid, flexbox, animações)
+JavaScript ES6+ (sem dependências externas)
+Google Fonts (Space Mono + Inter)
