@@ -813,3 +813,115 @@ ul {
   transform: translateY(-5px) scale(1.1);
   box-shadow: 0 5px 15px rgba(226, 24, 24, 0.4);
 }
+
+
+/* ============================================================
+   ÁREA LOGADA (NÃO ALTERA O RESTO DO SITE)
+   ============================================================ */
+
+.login-screen {
+  position: fixed;
+  inset: 0;
+  background: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.login-card {
+  background: #111;
+  padding: 3rem;
+  border: 1px solid var(--primary);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  border-radius: 12px;
+}
+
+.login-subtitle {
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+.form-group {
+  text-align: left;
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  color: var(--text-light);
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.form-group input {
+  width: 100%;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  color: white;
+  padding: 0.8rem;
+  border-radius: 6px;
+}
+
+/* Dashboard */
+
+.dashboard {
+  min-height: 100vh;
+  background: var(--bg-dark);
+  padding: 3rem;
+}
+
+/* Tabela */
+
+.table-container {
+  background: #111;
+  border-radius: 12px;
+  border: 1px solid #222;
+  overflow: hidden;
+  margin-top: 2rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: #1a1a1a;
+  text-align: left;
+  padding: 1rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+td {
+  padding: 1rem;
+  border-top: 1px solid #222;
+  font-size: 0.9rem;
+}
+
+/* Modal */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+
+.modal-content {
+  background: #111;
+  width: 100%;
+  max-width: 500px;
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid var(--primary);
+}

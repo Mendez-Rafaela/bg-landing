@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BGCAR — Área Logada</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #e21818;
+      --primary-dark: #b81010;
+      --primary-glow: rgba(226, 24, 24, 0.25);
+      --background: #0a0a0a;
+      --surface: #111111;
+      --surface-light: #1a1a1a;
+      --text: #ffffff;
+      --text-muted: #9ca3af;
+      --text-light: #d1d5db;
+      --border: rgba(226, 24, 24, 0.3);
+      --success: #4ade80;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --font-title: 'Space Mono', monospace;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--background);
+      color: var(--text);
+      font-family: var(--font-body);
+      line-height: 1.6;
+    }
+
+    /* ===== LOGIN SCREEN ===== */
+    .login-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .login-card {
+      background: var(--surface);
+      padding: 3rem;
+      border: 2px solid var(--primary);
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px var(--primary-glow);
+      animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .login-logo-img {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 2rem;
+      border-radius: 8px;
+      border: 2px solid var(--primary);
+    }
+
+    .login-subtitle {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .login-error {
+      color: var(--danger);
+      display: none;
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 3px solid var(--danger);
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      background: var(--surface-light);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.9rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: var(--surface-light);
+      box-shadow: 0 0 0 3px rgba(226, 24, 24, 0.1);
+    }
+
+    .btn {
+      padding: 0.9rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #fff;
+      width: 100%;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px var(--primary-glow);
+    }
+
+    .btn-secondary {
+      background: var(--surface-light);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--border);
+      border-color: var(--primary);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+
+    /* ===== DASHBOARD ===== */
+    .dashboard {
+      display: none;
+      min-height: 100vh;
+      background: var(--background);
+    }
+
+    .sidebar {
+      width: 280px;
+      background: linear-gradient(180deg, var(--surface) 0%, #0f0f0f 100%);
+      border-right: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+    }
+
+    .sidebar-logo-img {
+      width: 100%;
+      max-width: 200px;
+      height: auto;
+      margin-bottom: 2rem;
+      border-radius: 8px;
+      border: 2px solid var(--primary);
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-menu li {
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-menu button {
+      width: 100%;
+      text-align: left;
+      padding: 0.9rem 1rem;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+    }
+
+    .sidebar-menu button:hover {
+      background: var(--surface-light);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .sidebar-logout {
+      position: absolute;
+      bottom: 2rem;
+      left: 1.5rem;
+      right: 1.5rem;
+      width: calc(100% - 3rem);
+    }
+
+    .main-content {
+      margin-left: 280px;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn-novo {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #fff;
+      padding: 0.9rem 1.8rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-novo:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px var(--primary-glow);
+    }
+
+    /* ===== CARS GRID ===== */
+    .cars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .car-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .car-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 12px 32px var(--primary-glow);
+      transform: translateY(-4px);
+    }
+
+    .car-image {
+      width: 100%;
+      height: 220px;
+      background: linear-gradient(135deg, var(--surface-light) 0%, #1a1a1a 100%);
+      object-fit: cover;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .car-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .car-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--primary);
+      color: #fff;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .car-info {
+      padding: 1.5rem;
+    }
+
+    .car-header {
+      margin-bottom: 1rem;
+    }
+
+    .car-marca {
+      color: var(--primary);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .car-modelo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .car-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .detail-label {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+    }
+
+    .detail-value {
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .detail-value.highlight {
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
+
+    .car-actions {
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .car-actions button {
+      flex: 1;
+      padding: 0.7rem;
+      border: 1px solid var(--border);
+      background: var(--surface-light);
+      color: var(--text);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .car-actions button:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .car-actions .btn-delete {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    .car-actions .btn-delete:hover {
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    /* ===== MODAL ===== */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--surface);
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 700px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-header h2 {
+      font-size: 1.5rem;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .modal-close:hover {
+      color: var(--danger);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-grid.full {
+      grid-template-columns: 1fr;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: var(--surface-light);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.9rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(226, 24, 24, 0.1);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 0.8rem;
+      margin-top: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .gallery-item {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gallery-item-remove {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--danger);
+      border: none;
+      color: white;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .gallery-item-remove:hover {
+      background: #dc2626;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .modal-actions button {
+      flex: 1;
+      padding: 0.9rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+    }
+
+    .modal-actions .btn-save {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #fff;
+    }
+
+    .modal-actions .btn-save:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px var(--primary-glow);
+    }
+
+    .modal-actions .btn-cancel {
+      background: var(--surface-light);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .modal-actions .btn-cancel:hover {
+      background: var(--border);
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid var(--primary-glow);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 1rem;
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 1rem;
+      }
+
+      .cars-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-content {
+        width: 95%;
+        padding: 1.5rem;
+      }
+
+      .header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <img src="img/logo.jpeg" class="login-logo-img" alt="BGCAR Logo">
+
+    <div class="login-subtitle">Área Logada</div>
+
+    <div class="login-error" id="loginError">
+      <i class="fas fa-exclamation-circle"></i> Login inválido
+    </div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="username">Usuário</label>
+        <input type="text" id="username" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Senha</label>
+        <input type="password" id="password" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-sign-in-alt"></i> Entrar
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+
+  <aside class="sidebar">
+    <img src="img/logo.jpeg" class="sidebar-logo-img" alt="BGCAR Logo">
+
+    <ul class="sidebar-menu">
+      <li>
+        <button onclick="showSection('estoque')">
+          <i class="fas fa-car"></i> Estoque
+        </button>
+      </li>
+    </ul>
+
+    <button class="btn btn-secondary sidebar-logout" onclick="logout()">
+      <i class="fas fa-sign-out-alt"></i> Sair
+    </button>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- ESTOQUE SECTION -->
+    <section id="estoque-section">
+      <div class="header">
+        <h1>Gerenciador de Estoque</h1>
+        <div class="header-actions">
+          <button class="btn-novo" onclick="openModal()">
+            <i class="fas fa-plus"></i> Novo Carro
+          </button>
+        </div>
+      </div>
+
+      <div class="cars-grid" id="carsGrid"></div>
+    </section>
+
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+
+    <div class="modal-header">
+      <h2 id="modalTitle">Novo Carro</h2>
+      <button class="modal-close" onclick="closeModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <form id="carForm">
+      <input type="hidden" id="carId">
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="carMarca">Marca *</label>
+          <input type="text" id="carMarca" placeholder="Ex: Toyota" required>
+        </div>
+        <div class="form-group">
+          <label for="carModelo">Modelo *</label>
+          <input type="text" id="carModelo" placeholder="Ex: Corolla" required>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="carAno">Ano *</label>
+          <input type="number" id="carAno" placeholder="Ex: 2024" min="1990" max="2099" required>
+        </div>
+        <div class="form-group">
+          <label for="carCor">Cor *</label>
+          <input type="text" id="carCor" placeholder="Ex: Prata" required>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="carKm">Kilometragem (km) *</label>
+          <input type="number" id="carKm" placeholder="Ex: 45000" min="0" required>
+        </div>
+        <div class="form-group">
+          <label for="carValor">Valor (R$) *</label>
+          <input type="number" id="carValor" placeholder="Ex: 85000" min="0" step="0.01" required>
+        </div>
+      </div>
+
+      <div class="form-group full">
+        <label for="carDescricao">Descrição</label>
+        <textarea id="carDescricao" placeholder="Descrição adicional do veículo..." rows="3"></textarea>
+      </div>
+
+      <div class="form-group full">
+        <label for="carPhotos">Fotos do Veículo</label>
+        <input type="file" id="carPhotos" multiple accept="image/*">
+        <div id="photoGallery" class="gallery-grid"></div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit" class="btn-save">
+          <i class="fas fa-save"></i> Salvar
+        </button>
+        <button type="button" class="btn-cancel" onclick="closeModal()">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<script>
+// CONFIGURAÇÃO DO SUPABASE
+const SUPABASE_URL = 'https://exbitanikpzhepvdxszr.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV4Yml0YW5pa3B6aGVwdmR4c3pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MDUwODMsImV4cCI6MjA5MTA4MTA4M30.FPKfSdLNTpz6VAm07FY_H0rxrNAmuGG09YHmIU1ByCc';
+
+// Cliente Supabase
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let photos = [];
+let editingCarId = null;
+
+// LOGIN
+document.getElementById('loginForm').onsubmit = (e) => {
+  e.preventDefault();
+
+  const user = document.getElementById('username').value;
+  const pass = document.getElementById('password').value;
+
+  if (user === 'admin' && pass === 'bgcar2026') {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'flex';
+    loadCars();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('loginError').style.display = 'none';
+    }, 3000);
+  }
+};
+
+// LOAD CARS
+async function loadCars() {
+  try {
+    const { data: cars, error } = await supabaseClient
+      .from('cars')
+      .select('*');
+
+    if (error) {
+      console.error('Erro Supabase:', error);
+      throw error;
+    }
+
+    const grid = document.getElementById('carsGrid');
+    grid.innerHTML = '';
+
+    if (!cars || cars.length === 0) {
+      grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">Nenhum carro cadastrado ainda</p>';
+      return;
+    }
+
+    cars.forEach(car => {
+      const card = createCarCard(car);
+      grid.appendChild(card);
+    });
+  } catch (error) {
+    console.error('Erro ao carregar carros:', error);
+    alert('Erro ao carregar carros: ' + error.message);
+  }
+}
+
+// CREATE CAR CARD
+function createCarCard(car) {
+  const card = document.createElement('div');
+  card.className = 'car-card';
+
+  // Processa fotos (pode ser array ou JSON string)
+  const photos = Array.isArray(car.photos)
+    ? car.photos
+    : (car.photos ? JSON.parse(car.photos) : []);
+
+  const firstPhoto = photos[0] || 'https://via.placeholder.com/320x220?text=Sem+Foto';
+
+  const kmFormatted = new Intl.NumberFormat('pt-BR').format(car.km || 0);
+  const valorFormatted = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(car.valor || 0);
+
+  card.innerHTML = `
+    <div class="car-image">
+      <img src="${firstPhoto}" alt="${car.marca} ${car.modelo}">
+      <div class="car-badge">${car.ano}</div>
+    </div>
+    <div class="car-info">
+      <div class="car-header">
+        <div class="car-marca">${car.marca || 'Marca'}</div>
+        <div class="car-modelo">${car.modelo || 'Modelo'}</div>
+      </div>
+      <div class="car-details">
+        <div class="detail-item">
+          <span class="detail-label">Cor</span>
+          <span class="detail-value">${car.cor || '-'}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Kilometragem</span>
+          <span class="detail-value">${kmFormatted} km</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Valor</span>
+          <span class="detail-value highlight">${valorFormatted}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Ano</span>
+          <span class="detail-value">${car.ano || '-'}</span>
+        </div>
+      </div>
+      <div class="car-actions">
+        <button onclick="editCar('${car.id}')">
+          <i class="fas fa-edit"></i> Editar
+        </button>
+        <button class="btn-delete" onclick="deleteCar('${car.id}')">
+          <i class="fas fa-trash"></i> Excluir
+        </button>
+      </div>
+    </div>
+  `;
+
+  return card;
+}
+
+// OPEN MODAL
+function openModal() {
+  editingCarId = null;
+  photos = [];
+  document.getElementById('carId').value = '';
+  document.getElementById('carMarca').value = '';
+  document.getElementById('carModelo').value = '';
+  document.getElementById('carAno').value = '';
+  document.getElementById('carCor').value = '';
+  document.getElementById('carKm').value = '';
+  document.getElementById('carValor').value = '';
+  document.getElementById('carDescricao').value = '';
+  document.getElementById('carPhotos').value = '';
+  document.getElementById('photoGallery').innerHTML = '';
+  document.getElementById('modalTitle').textContent = 'Novo Carro';
+  document.getElementById('modal').classList.add('active');
+}
+
+// CLOSE MODAL
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+  photos = [];
+}
+
+// EDIT CAR
+async function editCar(id) {
+  try {
+    const { data: car, error } = await supabaseClient
+      .from('cars')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+
+    editingCarId = id;
+    
+    // Processa fotos
+    const carPhotos = Array.isArray(car.photos)
+      ? car.photos
+      : (car.photos ? JSON.parse(car.photos) : []);
+    
+    photos = carPhotos;
+
+    document.getElementById('carId').value = car.id;
+    document.getElementById('carMarca').value = car.marca || '';
+    document.getElementById('carModelo').value = car.modelo || '';
+    document.getElementById('carAno').value = car.ano || '';
+    document.getElementById('carCor').value = car.cor || '';
+    document.getElementById('carKm').value = car.km || '';
+    document.getElementById('carValor').value = car.valor || '';
+    document.getElementById('carDescricao').value = car.descricao || '';
+
+    renderPhotos();
+    document.getElementById('modalTitle').textContent = 'Editar Carro';
+    document.getElementById('modal').classList.add('active');
+  } catch (error) {
+    console.error('Erro ao editar carro:', error);
+    alert('Erro ao editar carro: ' + error.message);
+  }
+}
+
+// UPLOAD PHOTOS
+document.getElementById('carPhotos').onchange = (e) => {
+  const files = [...e.target.files];
+
+  files.forEach(file => {
+    const reader = new FileReader();
+
+    reader.onload = (ev) => {
+      photos.push(ev.target.result);
+      renderPhotos();
+    };
+
+    reader.readAsDataURL(file);
+  });
+};
+
+// RENDER PHOTOS
+function renderPhotos() {
+  const gallery = document.getElementById('photoGallery');
+  gallery.innerHTML = '';
+
+  photos.forEach((photo, index) => {
+    const item = document.createElement('div');
+    item.className = 'gallery-item';
+    item.innerHTML = `
+      <img src="${photo}" alt="Foto ${index + 1}">
+      <button type="button" class="gallery-item-remove" onclick="removePhoto(${index})">
+        <i class="fas fa-times"></i>
+      </button>
+    `;
+    gallery.appendChild(item);
+  });
+}
+
+// REMOVE PHOTO
+function removePhoto(index) {
+  photos.splice(index, 1);
+  renderPhotos();
+}
+
+// SAVE CAR
+document.getElementById('carForm').onsubmit = async (e) => {
+  e.preventDefault();
+
+  const car = {
+    marca: document.getElementById('carMarca').value,
+    modelo: document.getElementById('carModelo').value,
+    ano: parseInt(document.getElementById('carAno').value),
+    cor: document.getElementById('carCor').value,
+    km: parseInt(document.getElementById('carKm').value),
+    valor: parseFloat(document.getElementById('carValor').value),
+    descricao: document.getElementById('carDescricao').value,
+    photos: photos
+  };
+
+  try {
+    if (editingCarId) {
+      // UPDATE
+      const { error } = await supabaseClient
+        .from('cars')
+        .update(car)
+        .eq('id', editingCarId);
+      
+      if (error) throw error;
+    } else {
+      // INSERT
+      const { error } = await supabaseClient
+        .from('cars')
+        .insert([car]);
+      
+      if (error) throw error;
+    }
+
+    closeModal();
+    loadCars();
+  } catch (error) {
+    console.error('Erro ao salvar carro:', error);
+    alert('Erro ao salvar carro: ' + error.message);
+  }
+};
+
+// DELETE CAR
+async function deleteCar(id) {
+  if (!confirm('Tem certeza que deseja excluir este carro?')) return;
+
+  try {
+    const { error } = await supabaseClient
+      .from('cars')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+    
+    loadCars();
+  } catch (error) {
+    console.error('Erro ao excluir carro:', error);
+    alert('Erro ao excluir carro: ' + error.message);
+  }
+}
+
+// SHOW SECTION
+function showSection(section) {
+  // Implementar se necessário
+}
+
+// LOGOUT
+function logout() {
+  if (confirm('Deseja sair?')) {
+    location.reload();
+  }
+}
+</script>
+
+  <!-- SEU JS DO ADMIN -->
+  <script src="admin.js"></script>
+
+</body>
+</html>
