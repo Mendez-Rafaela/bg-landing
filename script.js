@@ -162,11 +162,17 @@ function createCarCard(car) {
       <p>${car.ano || '-'} • ${car.cor || '-'}</p>
       <p>${car.km || 0} km</p>
 
-      <a href="https://wa.me/551123641590?text=Olá, tenho interesse no ${car.modelo}"
-         target="_blank"
-         class="btn btn-primary">
-        Tenho interesse
-      </a>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <a href="detalhes.html?id=${car.id}" class="btn btn-outline" style="padding: 0.875rem 1rem; font-size: 0.65rem;">
+          Saiba Mais
+        </a>
+        <a href="https://wa.me/551123641590?text=Olá, tenho interesse no ${car.modelo}"
+           target="_blank"
+           class="btn btn-primary"
+           style="padding: 0.875rem 1rem; font-size: 0.65rem;">
+          Tenho interesse
+        </a>
+      </div>
     </div>
   `;
 
