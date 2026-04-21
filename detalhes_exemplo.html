@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhes do Veículo — BGCAR Motors</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .detalhes-page { padding-top: 60px; padding-bottom: 60px; min-height: 100vh; }
+    .car-header { margin-bottom: 2rem; }
+    .car-header h1 { font-family: var(--font-title); font-size: clamp(1.5rem, 4vw, 2.5rem); text-transform: uppercase; color: var(--text-white); }
+    .car-header h1 span { color: var(--primary); }
+    .car-main-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+    @media (max-width: 992px) { .car-main-grid { grid-template-columns: 1fr; gap: 2rem; } }
+    .details-carousel { position: relative; aspect-ratio: 16/10; background: #000; overflow: hidden; border: 1px solid var(--border); }
+    .details-carousel img { width: 100%; height: 100%; object-fit: cover; }
+    .car-info-box { background: var(--bg-card); padding: 2.5rem; border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; }
+    .car-price-large { font-family: var(--font-title); font-size: 3rem; color: var(--primary); margin-bottom: 1rem; font-weight: 700; }
+    .financing-phrase { font-size: 1.1rem; color: var(--text-light); margin-bottom: 2rem; border-left: 3px solid var(--primary); padding-left: 1rem; }
+    .car-description-section { background: var(--bg-card); padding: 2.5rem; border: 1px solid rgba(255, 255, 255, 0.05); margin-top: 2rem; }
+    .car-description-section h2 { font-family: var(--font-title); font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--primary); text-transform: uppercase; }
+    .car-description-text { color: var(--text-light); line-height: 1.8; white-space: pre-wrap; margin-bottom: 2rem; }
+    .details-cta { text-align: center; margin-top: 3rem; }
+  </style>
+</head>
+<body>
+  <main class="detalhes-page">
+    <div class="container">
+        <div class="car-header">
+            <h1>HONDA / CIVIC G10 <span>/ 2018</span></h1>
+        </div>
+
+        <div class="car-main-grid">
+            <div class="details-carousel">
+                <img src="img/cars-showcase.webp" alt="Civic">
+            </div>
+
+            <div class="car-info-box">
+                <div class="car-price-large">R$ 85.900</div>
+                <p class="financing-phrase">
+                    Aproveite as melhores taxas de financiamento do mercado! <br>
+                    <strong>Entrada facilitada e parcelas que cabem no seu bolso.</strong>
+                </p>
+                <a href="#" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center; font-size: 1rem;">
+                    <i class="fab fa-whatsapp"></i> FALAR COM VENDEDOR
+                </a>
+            </div>
+        </div>
+
+        <div class="car-description-section">
+            <h2>Descrição do Veículo</h2>
+            <div class="car-description-text">
+                Veículo em excelente estado de conservação, único dono, revisões em dia na concessionária. Completo com teto solar, bancos em couro e central multimídia.
+                
+                <br><br>
+                <strong>Características:</strong><br>
+                • Cor: Prata<br>
+                • Quilometragem: 45.000 km<br>
+                • Marca: HONDA<br>
+                • Modelo: CIVIC G10<br>
+                • Ano: 2018
+            </div>
+            
+            <div class="details-cta">
+                <a href="#" class="btn btn-outline-red btn-lg">
+                    <i class="fab fa-whatsapp"></i> CONSULTE AS CONDIÇÕES
+                </a>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="preview.html" style="color: var(--primary);">← Voltar para a lista</a>
+        </div>
+    </div>
+  </main>
+</body>
+</html>

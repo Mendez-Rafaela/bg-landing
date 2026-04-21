@@ -79,7 +79,7 @@ function renderDetails(car) {
 
     container.innerHTML = `
         <div class="car-header">
-            <h1>${car.modelo} <span>/ ${car.ano}</span> / ${car.marca}</h1>
+            <h1>${car.marca} / ${car.modelo} <span>/ ${car.ano}</span></h1>
         </div>
 
         <div class="car-main-grid">
