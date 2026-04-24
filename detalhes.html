@@ -11,9 +11,6 @@
   <!-- Font Awesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- Supabase SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
   <!-- Favicon -->
   <link rel="icon" type="image/jpeg" href="img/logo.jpeg">
 
@@ -154,6 +151,18 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 2rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -189,8 +198,51 @@
   <!-- FOOTER -->
   <footer class="footer">
     <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand-logo">
+            <img src="img/logo.jpeg" alt="BGCAR Motors Logo" class="footer-logo-img" />
+          </div>
+          <p class="footer-brand-desc">
+            A força do seu próximo carro. Compra, venda e troca com confiança.
+          </p>
+        </div>
+        <div>
+          <h4 class="footer-col-title">SERVIÇOS</h4>
+          <ul class="footer-links">
+            <li><a href="index.html#servicos">Comprar</a></li>
+            <li><a href="index.html#servicos">Vender</a></li>
+            <li><a href="index.html#servicos">Trocar</a></li>
+            <li><a href="index.html#estoque">Estoque</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">EMPRESA</h4>
+          <ul class="footer-links">
+            <li><a href="index.html#hero">Sobre</a></li>
+            <li><a href="index.html#contato">Contato</a></li>
+            <li><a href="./area-logada.html">Acesso Administrativo</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">REDES SOCIAIS</h4>
+          <div class="social-links">
+            <a href="https://www.instagram.com/bgcarmotors_/" target="_blank" rel="noopener" class="social-btn instagram" title="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://wa.me/551123641590" target="_blank" rel="noopener" class="social-btn whatsapp" title="WhatsApp">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="./area-logada.html" class="social-btn admin-lock" title="Área Logada">
+              <i class="fas fa-lock"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
       <div class="footer-bottom">
         <p class="footer-copy">&copy; 2026 BGCAR Motors. Todos os direitos reservados.</p>
+        <p class="footer-dev">Desenvolvido com &#9889; para você</p>
       </div>
     </div>
   </footer>

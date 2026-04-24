@@ -29,12 +29,20 @@ async function fetchCars() {
     }
 }
 
+// Função para gerar slug amigável
+function generateSlug(brand, model, year) {
+    return `${brand}-${model}-${year}`.toLowerCase().replace(/\s+/g, '-');
+}
+
 // Função para desenhar os cards na tela
 function renderCars(cars) {
     const estoqueGrid = document.getElementById('estoqueGrid');
     estoqueGrid.innerHTML = ''; // Limpa o "Carregando..."
 
     cars.forEach(car => {
+        const slug = generateSlug(car.brand, car.model, car.year);
+        const detailsUrl = `detalhes.html?slug=${slug}`;
+        
         const carCard = `
             <div class="car-card">
                 <div class="car-img">
@@ -44,10 +52,17 @@ function renderCars(cars) {
                     <h3 class="car-title">${car.brand} ${car.model}</h3>
                     <p class="car-details">${car.year} • ${car.km} km • ${car.color}</p>
                     <div class="car-price">R$ ${parseFloat(car.price).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</div>
-                    <a href="https://wa.me/551123641590?text=Olá, tenho interesse no ${car.brand} ${car.model}" 
-                       target="_blank" class="btn btn-primary btn-block">
-                       <i class="fab fa-whatsapp"></i> TENHO INTERESSE
-                    </a>
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <a href="${detailsUrl}" class="btn btn-outline" style="flex: 1; justify-content: center; padding: 10px 5px; font-size: 0.7rem;">
+                           <i class="fas fa-plus-circle"></i> MAIS INFO
+                        </a>
+                        <a href="https://wa.me/551123641590?text=Olá, tenho interesse no ${car.brand} ${car.model}" 
+                           target="_blank" 
+                           class="btn btn-primary" style="flex: 1.2; justify-content: center; padding: 10px 5px; font-size: 0.7rem;">
+                           <i class="fab fa-whatsapp"></i> TENHO INTERESSE
+                        </a>
+                    </div>
                 </div>
             </div>
         `;

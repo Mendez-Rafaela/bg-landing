@@ -5,6 +5,7 @@
 const API_URL = "https://api.bgcarmotors.com.br";
 
 let selectedFile = null;
+let editingCarId = null;
 
 /* ==========================================================
    START
@@ -101,7 +102,7 @@ function renderCars(cars) {
           Editar
         </button>
 
-        <button class="btn-delete" onclick="deleteCar(${car.id})">
+        <button class="delete" onclick="deleteCar(${car.id})">
           Excluir
         </button>
       </div>
@@ -170,21 +171,35 @@ function initForm() {
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/cars`, {
-        method: "POST",
-        body: formData
-      });
+      let response;
+      let successMessage;
+
+      if (editingCarId) {
+        // Modo edição: usar PUT
+        response = await fetch(`${API_URL}/api/cars/${editingCarId}`, {
+          method: "PUT",
+          body: formData
+        });
+        successMessage = "Carro atualizado com sucesso!";
+      } else {
+        // Modo criação: usar POST
+        response = await fetch(`${API_URL}/api/cars`, {
+          method: "POST",
+          body: formData
+        });
+        successMessage = "Carro cadastrado com sucesso!";
+      }
 
       if (!response.ok) throw new Error("Erro ao salvar");
 
-      alert("Carro cadastrado com sucesso!");
+      alert(successMessage);
 
       closeModal();
       loadCars();
 
     } catch (error) {
       console.error(error);
-      alert("Erro ao cadastrar carro.");
+      alert("Erro ao salvar carro.");
     }
   });
 }
@@ -200,6 +215,13 @@ window.editCar = async function (id) {
     const car = cars.find(item => item.id == id);
 
     if (!car) return;
+
+    // Define o ID para edição
+    editingCarId = id;
+    selectedFile = null;
+
+    // Atualiza o título do modal
+    document.querySelector(".modal-box h2").textContent = "Editar Veículo";
 
     document.getElementById("carMarca").value = car.brand;
     document.getElementById("carModelo").value = car.model;
@@ -254,7 +276,11 @@ window.logout = function () {
 ========================================================== */
 function resetForm() {
   selectedFile = null;
+  editingCarId = null;
+
+  // Reseta o título do modal
+  document.querySelector(".modal-box h2").textContent = "Novo Veículo";
 
   document.getElementById("carForm").reset();
-  document.getElementById("photoGallery").innerHTML = "";
+  document.getElementById("photoGallery").innerHTML = ""
 }

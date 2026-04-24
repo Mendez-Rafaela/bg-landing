@@ -2,55 +2,68 @@
    BGCAR Motors — PÁGINA DE DETALHES
    ============================================================ */
 
-/* ============================================================
-   BGCAR Motors — PÁGINA DE DETALHES (CONECTADO À VPS)
-   ============================================================ */
-
 const API_URL = 'https://api.bgcarmotors.com.br';
 
 document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
-    const carId = params.get('id');
+    const slug = params.get('slug');
 
-    if (carId) {
-        loadCarDetails(carId);
+    if (slug) {
+        loadCarDetailsBySlug(slug);
     } else {
-        document.getElementById('carDetailsContent').innerHTML = '<p style="text-align:center;">Veículo não encontrado.</p>';
+        document.getElementById('carDetailsContent').innerHTML = `
+            <a href="index.html" class="back-link">← Voltar ao Estoque</a>
+            <p style="text-align:center; color: var(--text-muted);">Veículo não encontrado.</p>
+        `;
     }
 });
 
-async function loadCarDetails(id) {
+async function loadCarDetailsBySlug(slug) {
     const container = document.getElementById('carDetailsContent');
 
     try {
-        // Busca na sua nova API em vez do Supabase
-        const response = await fetch(`${API_URL}/api/cars/${id}`);
-        if (!response.ok) throw new Error('Veículo não encontrado na VPS');
+        const response = await fetch(`${API_URL}/api/cars`);
+        if (!response.ok) throw new Error('Erro ao buscar veículos');
         
-        const car = await response.json();
+        const cars = await response.json();
+        
+        // Encontra o carro que corresponde ao slug
+        const car = cars.find(c => {
+            const carSlug = `${c.brand}-${c.model}-${c.year}`.toLowerCase().replace(/\s+/g, '-');
+            return carSlug === slug.toLowerCase();
+        });
+
+        if (!car) {
+            container.innerHTML = `
+                <a href="index.html" class="back-link">← Voltar ao Estoque</a>
+                <p style="text-align:center; color: var(--text-muted);">Veículo não encontrado.</p>
+            `;
+            return;
+        }
+
         renderDetails(car);
 
     } catch (err) {
         console.error('Erro ao carregar detalhes:', err);
         container.innerHTML = `
-            <p style="text-align:center;">
-                Erro ao carregar detalhes do veículo.<br>
-                <a href="index.html" style="color:var(--primary); text-decoration:underline;">Voltar ao início</a>
-            </p>`;
+            <a href="index.html" class="back-link">← Voltar ao Estoque</a>
+            <p style="text-align:center; color: var(--text-muted);">
+                Erro ao carregar detalhes do veículo.
+            </p>
+        `;
     }
 }
 
 function renderDetails(car) {
     const container = document.getElementById('carDetailsContent');
 
-    // Monta a URL da imagem principal da VPS
-    const mainPhoto = car.main_image ? `${API_URL}${car.main_image}` : 'img/cars-showcase.webp';
-
-    // Formatação de valores
-    const valorFormatado = car.price ? `R$ ${parseFloat(car.price).toLocaleString('pt-BR')}` : 'Sob consulta';
+    const valorFormatado = car.price ? `R$ ${parseFloat(car.price).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'Sob consulta';
     const whatsappLink = `https://wa.me/551123641590?text=Olá, gostaria de saber mais sobre o ${car.brand} ${car.model} ${car.year} que vi no site.`;
+    const mainPhoto = car.main_image ? car.main_image : 'img/cars-showcase.webp';
 
     container.innerHTML = `
+        <a href="index.html" class="back-link">← Voltar ao Estoque</a>
+
         <div class="car-header">
             <h1>${car.brand} / ${car.model} <span>/ ${car.year}</span></h1>
         </div>
@@ -62,7 +75,7 @@ function renderDetails(car) {
                         <img src="${mainPhoto}" alt="${car.model}">
                     </div>
                 </div>
-                </div>
+            </div>
 
             <div class="car-info-box">
                 <div class="car-price-large">${valorFormatado}</div>
@@ -98,20 +111,3 @@ function renderDetails(car) {
         </div>
     `;
 }
-
-// Mantendo a função do carrossel para compatibilidade de layout
-window.moveDetailsCarousel = function(direction) {
-    const container = document.getElementById('detailsCarouselContainer');
-    if (!container) return;
-    const slides = container.querySelectorAll('.details-carousel-slide');
-    if (slides.length <= 1) return;
-
-    let index = parseInt(container.dataset.index || 0);
-    index += direction;
-
-    if (index >= slides.length) index = 0;
-    if (index < 0) index = slides.length - 1;
-
-    container.style.transform = `translateX(-${index * 100}%)`;
-    container.dataset.index = index;
-};
