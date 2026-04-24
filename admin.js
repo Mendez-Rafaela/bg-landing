@@ -1,5 +1,5 @@
 /* ==========================================================
-   BGCAR Motors - Admin (Flask API)
+   BGCAR Motors - Admin Completo (Flask API)
 ========================================================== */
 
 const API_URL = "https://api.bgcarmotors.com.br";
@@ -68,7 +68,7 @@ async function loadCars() {
 }
 
 /* ==========================================================
-   RENDER CARS
+   RENDER LISTA HORIZONTAL
 ========================================================== */
 function renderCars(cars) {
   const grid = document.getElementById("carsGrid");
@@ -79,17 +79,31 @@ function renderCars(cars) {
     card.className = "car-card";
 
     card.innerHTML = `
-      <img src="${car.main_image}" alt="${car.brand}">
-      <div class="car-info">
-        <h3>${car.brand} ${car.model}</h3>
-        <p>${car.year} • ${car.km} km • ${car.color}</p>
-        <h2>R$ ${Number(car.price).toLocaleString("pt-BR")}</h2>
+      <div class="car-image">
+        <img src="${car.main_image}" alt="${car.brand}">
+      </div>
 
-        <div class="car-actions">
-          <button class="btn-delete" onclick="deleteCar(${car.id})">
-            Excluir
-          </button>
+      <div class="car-info">
+        <div class="car-brand">${car.brand}</div>
+        <div class="car-model">${car.model}</div>
+
+        <div class="car-line">
+          ${car.year} • ${Number(car.km).toLocaleString("pt-BR")} km • ${car.color}
         </div>
+
+        <div class="price">
+          R$ ${Number(car.price).toLocaleString("pt-BR")}
+        </div>
+      </div>
+
+      <div class="car-actions">
+        <button class="edit" onclick="editCar(${car.id})">
+          Editar
+        </button>
+
+        <button class="btn-delete" onclick="deleteCar(${car.id})">
+          Excluir
+        </button>
       </div>
     `;
 
@@ -110,7 +124,7 @@ window.closeModal = function () {
 };
 
 /* ==========================================================
-   UPLOAD PREVIEW
+   PREVIEW FOTO
 ========================================================== */
 function initUpload() {
   const input = document.getElementById("carPhotos");
@@ -174,6 +188,38 @@ function initForm() {
     }
   });
 }
+
+/* ==========================================================
+   EDITAR (abre modal preenchido)
+========================================================== */
+window.editCar = async function (id) {
+  try {
+    const response = await fetch(`${API_URL}/api/cars`);
+    const cars = await response.json();
+
+    const car = cars.find(item => item.id == id);
+
+    if (!car) return;
+
+    document.getElementById("carMarca").value = car.brand;
+    document.getElementById("carModelo").value = car.model;
+    document.getElementById("carAno").value = car.year;
+    document.getElementById("carCor").value = car.color;
+    document.getElementById("carKm").value = car.km;
+    document.getElementById("carValor").value = car.price;
+    document.getElementById("carDescricao").value = car.description || "";
+
+    document.getElementById("photoGallery").innerHTML = `
+      <img src="${car.main_image}">
+    `;
+
+    openModal();
+
+  } catch (error) {
+    console.error(error);
+    alert("Erro ao carregar veículo.");
+  }
+};
 
 /* ==========================================================
    EXCLUIR

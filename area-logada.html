@@ -3,30 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BGCAR Motors — Área Logada</title>
+<title>BGCAR Motors - Área Logada</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-
-:root{
---primary:#e21818;
---primary-dark:#b81010;
---background:#0a0a0a;
---surface:#111;
---surface-light:#1a1a1a;
---text:#fff;
---text-muted:#9ca3af;
---danger:#ef4444;
---border:rgba(226,24,24,.25);
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
 }
 
 body{
-background:var(--background);
-color:var(--text);
-font-family:'Inter',sans-serif;
+background:#0b0b0b;
+color:#fff;
 }
 
 /* LOGIN */
@@ -34,71 +25,69 @@ font-family:'Inter',sans-serif;
 position:fixed;
 inset:0;
 display:flex;
-align-items:center;
 justify-content:center;
-background:linear-gradient(135deg,#0a0a0a,#171717);
-z-index:1000;
+align-items:center;
+background:#000;
+z-index:999;
 }
 
-.login-card{
+.login-box{
 width:100%;
 max-width:420px;
-background:var(--surface);
-padding:40px;
+background:#111;
+padding:35px;
 border-radius:14px;
-border:1px solid var(--border);
-box-shadow:0 20px 50px rgba(0,0,0,.45);
-}
-
-.login-card h1{
-font-size:28px;
-margin-bottom:8px;
-font-family:'Space Mono',monospace;
-}
-
-.login-sub{
-color:var(--text-muted);
-margin-bottom:25px;
-font-size:14px;
-}
-
-input,textarea{
-width:100%;
-padding:14px;
-margin-bottom:14px;
-background:var(--surface-light);
 border:1px solid #222;
-color:#fff;
+}
+
+.login-logo{
+width:180px;
+display:block;
+margin:0 auto 18px auto;
+border-radius:10px;
+}
+
+.login-box p{
+color:#aaa;
+margin-bottom:20px;
+text-align:center;
+font-size:15px;
+}
+
+input, textarea{
+width:100%;
+padding:13px;
+margin-bottom:12px;
 border-radius:8px;
+border:1px solid #222;
+background:#181818;
+color:#fff;
 outline:none;
 }
 
-input:focus,textarea:focus{
-border-color:var(--primary);
+input:focus,
+textarea:focus{
+border-color:#e21818;
 }
 
 button{
 border:none;
 cursor:pointer;
-padding:14px;
 border-radius:8px;
+padding:12px;
 font-weight:700;
-transition:.2s;
 }
 
 .btn-primary{
-background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+background:#e21818;
 color:#fff;
 }
 
-.btn-primary:hover{
-transform:translateY(-2px);
-}
-
-#errorLogin{
+#loginError{
 display:none;
-color:#ff7070;
+color:#ff9090;
 margin-top:10px;
+text-align:center;
 }
 
 /* DASHBOARD */
@@ -108,80 +97,84 @@ min-height:100vh;
 }
 
 .sidebar{
-width:270px;
-background:var(--surface);
 position:fixed;
 top:0;
 left:0;
 bottom:0;
-padding:30px 20px;
-border-right:1px solid var(--border);
+width:240px;
+background:#111;
+padding:25px;
+border-right:1px solid #222;
 }
 
 .logo{
-font-size:28px;
-font-family:'Space Mono',monospace;
+text-align:center;
 margin-bottom:30px;
 }
 
-.menu button{
-width:100%;
-margin-bottom:10px;
-background:var(--surface-light);
-color:#fff;
-text-align:left;
+.logo img{
+width:170px;
+border-radius:10px;
 }
 
-.menu button:hover{
-background:#222;
+.sidebar button{
+width:100%;
+margin-bottom:12px;
 }
 
 .logout{
 position:absolute;
-left:20px;
-right:20px;
 bottom:20px;
+left:25px;
+right:25px;
 }
 
 .main{
-margin-left:270px;
-padding:35px;
+margin-left:240px;
+padding:30px;
 }
 
-.topbar{
+.top{
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:30px;
+margin-bottom:22px;
 }
 
-.topbar h1{
-font-size:30px;
-font-family:'Space Mono',monospace;
+.top h1{
+font-size:28px;
 }
 
+/* LISTA */
 .cars-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:22px;
+display:flex;
+flex-direction:column;
+gap:12px;
 }
 
+/* CARD */
 .car-card{
-background:var(--surface);
-border:1px solid #1d1d1d;
-border-radius:14px;
-overflow:hidden;
-transition:.25s;
+display:flex;
+align-items:center;
+gap:14px;
+background:#111;
+border:1px solid #222;
+padding:12px;
+border-radius:12px;
+transition:.2s;
 }
 
 .car-card:hover{
-transform:translateY(-4px);
-border-color:var(--primary);
+border-color:#e21818;
 }
 
+/* FOTO */
 .car-image{
-height:220px;
+width:75px;
+height:55px;
+border-radius:8px;
 overflow:hidden;
+flex-shrink:0;
 }
 
 .car-image img{
@@ -190,55 +183,68 @@ height:100%;
 object-fit:cover;
 }
 
+/* INFO */
 .car-info{
-padding:18px;
+flex:1;
 }
 
 .car-brand{
-font-size:13px;
-color:var(--primary);
-text-transform:uppercase;
+font-size:12px;
 font-weight:700;
+color:#e21818;
+text-transform:uppercase;
+margin-bottom:2px;
 }
 
 .car-model{
-font-size:24px;
-font-weight:700;
-margin:4px 0 14px;
+font-size:20px;
+font-weight:800;
+margin-bottom:5px;
 }
 
 .car-line{
-color:#c7c7c7;
-margin-bottom:8px;
-font-size:14px;
+font-size:13px;
+color:#ccc;
+margin-bottom:4px;
 }
 
 .price{
-font-size:24px;
+font-size:18px;
 font-weight:800;
-margin-top:12px;
 }
 
-.btn-delete{
-background:#2a1111;
+/* BOTÕES */
+.car-actions{
+display:flex;
+flex-direction:column;
+gap:8px;
+width:110px;
+}
+
+.car-actions button{
+padding:10px;
+font-size:13px;
+}
+
+.edit{
+background:#e21818;
+color:#fff;
+}
+
+.delete{
+background:#2a1212;
 color:#ff8d8d;
-width:100%;
-margin-top:15px;
-}
-
-.btn-delete:hover{
-background:#3c1515;
 }
 
 /* MODAL */
 .modal{
 position:fixed;
 inset:0;
-background:rgba(0,0,0,.8);
+background:rgba(0,0,0,.7);
 display:none;
-align-items:center;
 justify-content:center;
-z-index:2000;
+align-items:center;
+z-index:9999;
 }
 
 .modal.active{
@@ -247,59 +253,84 @@ display:flex;
 
 .modal-box{
 width:100%;
-max-width:760px;
-background:var(--surface);
-padding:30px;
-border-radius:16px;
-border:1px solid var(--border);
+max-width:720px;
+background:#111;
+padding:25px;
+border-radius:14px;
 max-height:90vh;
 overflow:auto;
 }
 
 .modal-box h2{
-margin-bottom:20px;
-font-size:24px;
-font-family:'Space Mono',monospace;
+margin-bottom:18px;
 }
 
 .row{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:14px;
+gap:12px;
 }
 
 .preview img{
 width:90px;
 height:90px;
-object-fit:cover;
 border-radius:10px;
+object-fit:cover;
 margin-top:10px;
 }
 
 .actions{
 display:flex;
-gap:12px;
-margin-top:18px;
+gap:10px;
+margin-top:16px;
 }
 
+/* MOBILE */
 @media(max-width:768px){
+
 .sidebar{
 position:relative;
 width:100%;
 height:auto;
 }
+
 .main{
 margin-left:0;
 padding:20px;
 }
+
+.top{
+flex-direction:column;
+align-items:flex-start;
+gap:10px;
+}
+
 .row{
 grid-template-columns:1fr;
 }
-.topbar{
-flex-direction:column;
-gap:12px;
-align-items:flex-start;
+
+.car-card{
+gap:10px;
 }
+
+.car-image{
+width:70px;
+height:50px;
+}
+
+.car-model{
+font-size:16px;
+}
+
+.car-actions{
+width:95px;
+}
+
+.car-actions button{
+padding:8px;
+font-size:12px;
+}
+
 }
 </style>
 </head>
@@ -308,53 +339,57 @@ align-items:flex-start;
 
 <!-- LOGIN -->
 <div class="login-screen" id="loginScreen">
-<div class="login-card">
-<h1>BGCAR</h1>
-<div class="login-sub">Área Logada</div>
+<div class="login-box">
+
+<img src="img/logo.jpeg" class="login-logo">
+
+<p>Área Logada</p>
 
 <form id="loginForm">
 <input type="text" id="username" placeholder="Usuário" required>
 <input type="password" id="password" placeholder="Senha" required>
 
-<button class="btn-primary" style="width:100%">
+<button type="submit" class="btn-primary" style="width:100%">
 Entrar
 </button>
 </form>
 
-<div id="loginError">Usuário ou senha inválidos.</div>
+<div id="loginError">Login inválido</div>
 </div>
 </div>
 
 <!-- DASHBOARD -->
 <div class="dashboard" id="dashboard">
 
-<aside class="sidebar">
-<div class="logo">BGCAR</div>
+<div class="sidebar">
 
-<div class="menu">
-<button onclick="openModal()">
-<i class="fas fa-plus"></i> Novo Carro
-</button>
+<div class="logo">
+<img src="img/logo.jpeg">
 </div>
+
+<button class="btn-primary" onclick="openModal()">
++ Novo Carro
+</button>
 
 <button class="btn-primary logout" onclick="logout()">
 Sair
 </button>
-</aside>
 
-<main class="main">
+</div>
 
-<div class="topbar">
+<div class="main">
+
+<div class="top">
 <h1>Estoque</h1>
 
 <button class="btn-primary" onclick="openModal()">
-<i class="fas fa-plus"></i> Novo Carro
++ Novo Carro
 </button>
 </div>
 
 <div class="cars-grid" id="carsGrid"></div>
 
-</main>
+</div>
 </div>
 
 <!-- MODAL -->
