@@ -1,127 +1,214 @@
-/* ============================================================
-   BGCAR Motors — ADMIN (Área Logada - CONECTADO À VPS)
-   ============================================================ */
+/* ==========================================================
+   BGCAR Motors - Admin (Flask API)
+========================================================== */
 
-const API_URL = 'https://api.bgcarmotors.com.br';
+const API_URL = "https://api.bgcarmotors.com.br";
 
-// ESTADO (Simplificado para a estrutura atual da VPS)
 let selectedFile = null;
 
-document.addEventListener('DOMContentLoaded', () => {
-    const inputPhotos = document.getElementById('carPhotos');
-    const form = document.getElementById('carForm');
-
-    if (inputPhotos) {
-        initUpload(inputPhotos);
-    }
-
-    if (form) {
-        initForm(form);
-    }
+/* ==========================================================
+   START
+========================================================== */
+document.addEventListener("DOMContentLoaded", () => {
+  initLogin();
+  initUpload();
+  initForm();
 });
 
-// ============================================================
-// SELEÇÃO DE FOTO (PREVIEW)
-// ============================================================
-function initUpload(inputPhotos) {
-    inputPhotos.addEventListener('change', (e) => {
-        const file = e.target.files[0]; // Pegamos a primeira foto
-        if (!file) return;
+/* ==========================================================
+   LOGIN
+========================================================== */
+function initLogin() {
+  const form = document.getElementById("loginForm");
 
-        selectedFile = file;
-        renderPreview(file);
-    });
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const user = document.getElementById("username").value.trim();
+    const pass = document.getElementById("password").value.trim();
+
+    if (user === "admin" && pass === "bgcar2026") {
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("dashboard").style.display = "block";
+
+      loadCars();
+    } else {
+      document.getElementById("loginError").style.display = "block";
+
+      setTimeout(() => {
+        document.getElementById("loginError").style.display = "none";
+      }, 3000);
+    }
+  });
 }
 
-function renderPreview(file) {
-    const gallery = document.getElementById('photoGallery');
-    if (!gallery) return;
+/* ==========================================================
+   CARREGAR CARROS
+========================================================== */
+async function loadCars() {
+  const grid = document.getElementById("carsGrid");
 
-    gallery.innerHTML = '';
+  grid.innerHTML = "<p>Carregando veículos...</p>";
 
-    const div = document.createElement('div');
-    div.className = `gallery-item main`;
+  try {
+    const response = await fetch(`${API_URL}/api/cars`);
+    const cars = await response.json();
 
-    // Cria uma URL temporária apenas para mostrar no navegador antes de subir
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        div.innerHTML = `
-            <img src="${e.target.result}">
-            <span style="position:absolute;bottom:5px;left:5px;background:rgba(0,0,0,0.7);color:#fff;padding:2px 5px;font-size:10px;border-radius:3px;">
-                FOTO PRINCIPAL
-            </span>
-            <button class="gallery-item-remove" onclick="removePhoto()">✕</button>
-        `;
-    };
-    reader.readAsDataURL(file);
+    if (!cars || cars.length === 0) {
+      grid.innerHTML = "<p>Nenhum carro cadastrado.</p>";
+      return;
+    }
 
-    gallery.appendChild(div);
+    renderCars(cars);
+
+  } catch (error) {
+    console.error(error);
+    grid.innerHTML = "<p>Erro ao carregar carros.</p>";
+  }
 }
 
-window.removePhoto = function() {
-    selectedFile = null;
-    const gallery = document.getElementById('photoGallery');
-    if (gallery) gallery.innerHTML = '';
-    const input = document.getElementById('carPhotos');
-    if (input) input.value = '';
+/* ==========================================================
+   RENDER CARS
+========================================================== */
+function renderCars(cars) {
+  const grid = document.getElementById("carsGrid");
+  grid.innerHTML = "";
+
+  cars.forEach(car => {
+    const card = document.createElement("div");
+    card.className = "car-card";
+
+    card.innerHTML = `
+      <img src="${car.main_image}" alt="${car.brand}">
+      <div class="car-info">
+        <h3>${car.brand} ${car.model}</h3>
+        <p>${car.year} • ${car.km} km • ${car.color}</p>
+        <h2>R$ ${Number(car.price).toLocaleString("pt-BR")}</h2>
+
+        <div class="car-actions">
+          <button class="btn-delete" onclick="deleteCar(${car.id})">
+            Excluir
+          </button>
+        </div>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+/* ==========================================================
+   MODAL
+========================================================== */
+window.openModal = function () {
+  document.getElementById("modal").classList.add("active");
 };
 
-// ============================================================
-// SALVAR NA VPS (FORM DATA)
-// ============================================================
-function initForm(form) {
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
+window.closeModal = function () {
+  document.getElementById("modal").classList.remove("active");
+  resetForm();
+};
 
-        // 1. Validações básicas
-        const marca = document.getElementById('carMarca').value;
-        const modelo = document.getElementById('carModelo').value;
-        
-        if (!marca || !modelo) {
-            alert('Preencha marca e modelo');
-            return;
-        }
+/* ==========================================================
+   UPLOAD PREVIEW
+========================================================== */
+function initUpload() {
+  const input = document.getElementById("carPhotos");
 
-        if (!selectedFile) {
-            alert('Por favor, selecione ao menos uma foto principal.');
-            return;
-        }
+  input.addEventListener("change", (e) => {
+    selectedFile = e.target.files[0];
 
-        // 2. Cria o pacote de dados (FormData) para enviar arquivos + texto
-        const formData = new FormData();
-        formData.append('brand', marca);
-        formData.append('model', modelo);
-        formData.append('year', document.getElementById('carAno').value);
-        formData.append('color', document.getElementById('carCor').value);
-        formData.append('km', document.getElementById('carKm').value);
-        formData.append('price', document.getElementById('carValor').value);
-        formData.append('description', document.getElementById('carDescricao').value);
-        formData.append('image', selectedFile); // O arquivo da imagem vai aqui
+    if (!selectedFile) return;
 
-        try {
-            // 3. Envia para a sua VPS Hostinger
-            const response = await fetch(`${API_URL}/api/cars`, {
-                method: 'POST',
-                body: formData // Não precisa de Headers de Content-Type, o browser faz sozinho
-            });
+    const reader = new FileReader();
 
-            if (!response.ok) throw new Error('Erro ao salvar na VPS');
+    reader.onload = function (ev) {
+      document.getElementById("photoGallery").innerHTML = `
+        <img src="${ev.target.result}">
+      `;
+    };
 
-            alert('Carro salvo com sucesso na Hostinger!');
-            resetForm();
-
-        } catch (err) {
-            console.error('Erro ao salvar:', err);
-            alert('Erro ao conectar com o servidor da VPS.');
-        }
-    });
+    reader.readAsDataURL(selectedFile);
+  });
 }
 
-// ============================================================
-// RESET
-// ============================================================
+/* ==========================================================
+   SALVAR
+========================================================== */
+function initForm() {
+  const form = document.getElementById("carForm");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    formData.append("brand", document.getElementById("carMarca").value);
+    formData.append("model", document.getElementById("carModelo").value);
+    formData.append("year", document.getElementById("carAno").value);
+    formData.append("color", document.getElementById("carCor").value);
+    formData.append("km", document.getElementById("carKm").value);
+    formData.append("price", document.getElementById("carValor").value);
+    formData.append("description", document.getElementById("carDescricao").value);
+
+    if (selectedFile) {
+      formData.append("image", selectedFile);
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/api/cars`, {
+        method: "POST",
+        body: formData
+      });
+
+      if (!response.ok) throw new Error("Erro ao salvar");
+
+      alert("Carro cadastrado com sucesso!");
+
+      closeModal();
+      loadCars();
+
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao cadastrar carro.");
+    }
+  });
+}
+
+/* ==========================================================
+   EXCLUIR
+========================================================== */
+window.deleteCar = async function (id) {
+  if (!confirm("Deseja excluir este carro?")) return;
+
+  try {
+    const response = await fetch(`${API_URL}/api/cars/${id}`, {
+      method: "DELETE"
+    });
+
+    if (!response.ok) throw new Error("Erro");
+
+    loadCars();
+
+  } catch (error) {
+    console.error(error);
+    alert("Erro ao excluir.");
+  }
+};
+
+/* ==========================================================
+   LOGOUT
+========================================================== */
+window.logout = function () {
+  location.reload();
+};
+
+/* ==========================================================
+   RESET
+========================================================== */
 function resetForm() {
-    const form = document.getElementById('carForm');
-    if (form) form.reset();
-    removePhoto();
+  selectedFile = null;
+
+  document.getElementById("carForm").reset();
+  document.getElementById("photoGallery").innerHTML = "";
 }
