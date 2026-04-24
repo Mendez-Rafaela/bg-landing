@@ -139,15 +139,66 @@ window.closeModal = () => {
   document.getElementById("modal").classList.remove("active");
   resetForm();
 };
-function initUpload() {
-  document.getElementById("carPhotos").addEventListener("change", (e) => {
-    selectedFile = e.target.files[0];
-    if (!selectedFile) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => { document.getElementById("photoGallery").innerHTML = `<img src="${ev.target.result}">`; };
-    reader.readAsDataURL(selectedFile);
+function initUpload(inputPhotos) {
+  inputPhotos.addEventListener('change', async (e) => {
+    const files = e.target.files;
+
+    for (let file of files) {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await fetch(`${API_URL}/upload`, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) throw new Error('Erro no upload');
+        
+        const data = await response.json();
+        photos.push(data.url);
+
+        if (!mainPhoto && photos.length > 0) {
+          mainPhoto = photos[0];
+        }
+
+        renderGallery();
+      } catch (err) {
+        console.error('Erro upload:', err);
+        continue;
+      }
+    } // Fecha o loop for
+  }); // Fecha o EventListener
+} // Fecha a função initUpload
+
+
+function renderGallery() {
+  const gallery = document.getElementById('photoGallery');
+  if (!gallery) return;
+
+  gallery.innerHTML = ''; // Limpa a galeria para redesenhar a lista atualizada
+
+  photos.forEach((photo, index) => {
+    const isMain = photo === mainPhoto;
+    const div = document.createElement('div');
+    div.className = `gallery-item ${isMain ? 'main' : ''}`;
+
+    div.innerHTML = `
+      <img src="${photo}">
+      <button type="button" onclick="setMainPhoto('${photo}')"
+        style="position:absolute;bottom:5px;left:5px;">
+        ⭐
+      </button>
+      <button type="button" class="gallery-item-remove"
+        onclick="removePhoto(${index})">
+        ✕
+      </button>
+    `;
+    gallery.appendChild(div);
   });
 }
+
+
 function resetForm() {
   editingCarId = null;
   selectedFile = null;

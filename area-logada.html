@@ -105,8 +105,6 @@ width:240px;
 background:#111;
 padding:25px;
 border-right:1px solid #222;
-display: flex;
-flex-direction: column;
 }
 
 .logo{
@@ -125,8 +123,11 @@ margin-bottom:12px;
 }
 
 .logout{
-margin-top: auto;
-width: 100% !important;
+position:absolute;
+bottom:20px;
+left:20px;
+right:20px;
+width: calc(100% - 40px) !important;
 }
 
 .main{
@@ -417,7 +418,7 @@ Sair
 
 <textarea id="carDescricao" rows="4" placeholder="Descrição"></textarea>
 
-<input type="file" id="carPhotos" accept="image/*">
+<input type="file" id="carPhotos" accept="image/*" multiple>
 
 <div class="preview" id="photoGallery"></div>
 
