@@ -6,149 +6,300 @@
 <title>BGCAR Motors — Área Logada</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+--primary:#e21818;
+--primary-dark:#b81010;
+--background:#0a0a0a;
+--surface:#111;
+--surface-light:#1a1a1a;
+--text:#fff;
+--text-muted:#9ca3af;
+--danger:#ef4444;
+--border:rgba(226,24,24,.25);
+}
+
 body{
-  margin:0;
-  background:#0b0b0b;
-  color:#fff;
-  font-family:Arial, Helvetica, sans-serif;
+background:var(--background);
+color:var(--text);
+font-family:'Inter',sans-serif;
 }
 
+/* LOGIN */
 .login-screen{
-  position:fixed;
-  inset:0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:#000;
+position:fixed;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+background:linear-gradient(135deg,#0a0a0a,#171717);
+z-index:1000;
 }
 
-.login-box{
-  width:100%;
-  max-width:420px;
-  background:#111;
-  padding:30px;
-  border:1px solid #333;
-  border-radius:10px;
+.login-card{
+width:100%;
+max-width:420px;
+background:var(--surface);
+padding:40px;
+border-radius:14px;
+border:1px solid var(--border);
+box-shadow:0 20px 50px rgba(0,0,0,.45);
 }
 
-.login-box h1{
-  margin:0 0 20px;
-  color:#e21818;
+.login-card h1{
+font-size:28px;
+margin-bottom:8px;
+font-family:'Space Mono',monospace;
 }
 
-input, textarea{
-  width:100%;
-  padding:12px;
-  margin-bottom:12px;
-  background:#1b1b1b;
-  border:1px solid #333;
-  color:#fff;
-  border-radius:6px;
+.login-sub{
+color:var(--text-muted);
+margin-bottom:25px;
+font-size:14px;
+}
+
+input,textarea{
+width:100%;
+padding:14px;
+margin-bottom:14px;
+background:var(--surface-light);
+border:1px solid #222;
+color:#fff;
+border-radius:8px;
+outline:none;
+}
+
+input:focus,textarea:focus{
+border-color:var(--primary);
 }
 
 button{
-  padding:12px 18px;
-  border:none;
-  cursor:pointer;
-  border-radius:6px;
+border:none;
+cursor:pointer;
+padding:14px;
+border-radius:8px;
+font-weight:700;
+transition:.2s;
 }
 
 .btn-primary{
-  background:#e21818;
-  color:#fff;
+background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+color:#fff;
 }
 
+.btn-primary:hover{
+transform:translateY(-2px);
+}
+
+#errorLogin{
+display:none;
+color:#ff7070;
+margin-top:10px;
+}
+
+/* DASHBOARD */
 .dashboard{
-  display:none;
+display:none;
+min-height:100vh;
 }
 
 .sidebar{
-  width:250px;
-  background:#111;
-  min-height:100vh;
-  position:fixed;
-  padding:20px;
+width:270px;
+background:var(--surface);
+position:fixed;
+top:0;
+left:0;
+bottom:0;
+padding:30px 20px;
+border-right:1px solid var(--border);
+}
+
+.logo{
+font-size:28px;
+font-family:'Space Mono',monospace;
+margin-bottom:30px;
+}
+
+.menu button{
+width:100%;
+margin-bottom:10px;
+background:var(--surface-light);
+color:#fff;
+text-align:left;
+}
+
+.menu button:hover{
+background:#222;
+}
+
+.logout{
+position:absolute;
+left:20px;
+right:20px;
+bottom:20px;
 }
 
 .main{
-  margin-left:250px;
-  padding:30px;
+margin-left:270px;
+padding:35px;
 }
 
-.top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.topbar h1{
+font-size:30px;
+font-family:'Space Mono',monospace;
 }
 
 .cars-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-  gap:20px;
-  margin-top:30px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:22px;
 }
 
 .car-card{
-  background:#111;
-  border:1px solid #333;
-  border-radius:10px;
-  overflow:hidden;
+background:var(--surface);
+border:1px solid #1d1d1d;
+border-radius:14px;
+overflow:hidden;
+transition:.25s;
 }
 
-.car-card img{
-  width:100%;
-  height:220px;
-  object-fit:cover;
+.car-card:hover{
+transform:translateY(-4px);
+border-color:var(--primary);
+}
+
+.car-image{
+height:220px;
+overflow:hidden;
+}
+
+.car-image img{
+width:100%;
+height:100%;
+object-fit:cover;
 }
 
 .car-info{
-  padding:15px;
+padding:18px;
 }
 
-.car-actions{
-  margin-top:15px;
+.car-brand{
+font-size:13px;
+color:var(--primary);
+text-transform:uppercase;
+font-weight:700;
+}
+
+.car-model{
+font-size:24px;
+font-weight:700;
+margin:4px 0 14px;
+}
+
+.car-line{
+color:#c7c7c7;
+margin-bottom:8px;
+font-size:14px;
+}
+
+.price{
+font-size:24px;
+font-weight:800;
+margin-top:12px;
 }
 
 .btn-delete{
-  background:#c40000;
-  color:#fff;
-  width:100%;
+background:#2a1111;
+color:#ff8d8d;
+width:100%;
+margin-top:15px;
 }
 
+.btn-delete:hover{
+background:#3c1515;
+}
+
+/* MODAL */
 .modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.8);
-  display:none;
-  justify-content:center;
-  align-items:center;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.8);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:2000;
 }
 
 .modal.active{
-  display:flex;
+display:flex;
 }
 
 .modal-box{
-  width:100%;
-  max-width:700px;
-  background:#111;
-  padding:30px;
-  border-radius:10px;
+width:100%;
+max-width:760px;
+background:var(--surface);
+padding:30px;
+border-radius:16px;
+border:1px solid var(--border);
+max-height:90vh;
+overflow:auto;
+}
+
+.modal-box h2{
+margin-bottom:20px;
+font-size:24px;
+font-family:'Space Mono',monospace;
 }
 
 .row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:15px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
 }
 
-#photoGallery img{
-  width:80px;
-  height:80px;
-  object-fit:cover;
-  margin-top:10px;
+.preview img{
+width:90px;
+height:90px;
+object-fit:cover;
+border-radius:10px;
+margin-top:10px;
+}
+
+.actions{
+display:flex;
+gap:12px;
+margin-top:18px;
+}
+
+@media(max-width:768px){
+.sidebar{
+position:relative;
+width:100%;
+height:auto;
+}
+.main{
+margin-left:0;
+padding:20px;
+}
+.row{
+grid-template-columns:1fr;
+}
+.topbar{
+flex-direction:column;
+gap:12px;
+align-items:flex-start;
+}
 }
 </style>
 </head>
@@ -157,92 +308,97 @@ button{
 
 <!-- LOGIN -->
 <div class="login-screen" id="loginScreen">
-  <div class="login-box">
-    <h1>Área Logada</h1>
+<div class="login-card">
+<h1>BGCAR</h1>
+<div class="login-sub">Área Logada</div>
 
-    <form id="loginForm">
-      <input type="text" id="username" placeholder="Usuário" required>
-      <input type="password" id="password" placeholder="Senha" required>
+<form id="loginForm">
+<input type="text" id="username" placeholder="Usuário" required>
+<input type="password" id="password" placeholder="Senha" required>
 
-      <button type="submit" class="btn-primary" style="width:100%;">
-        Entrar
-      </button>
-    </form>
+<button class="btn-primary" style="width:100%">
+Entrar
+</button>
+</form>
 
-    <p id="loginError" style="color:red;display:none;margin-top:15px;">
-      Usuário ou senha inválidos
-    </p>
-  </div>
+<div id="loginError">Usuário ou senha inválidos.</div>
+</div>
 </div>
 
 <!-- DASHBOARD -->
 <div class="dashboard" id="dashboard">
 
-  <aside class="sidebar">
-    <h2>BGCAR</h2>
+<aside class="sidebar">
+<div class="logo">BGCAR</div>
 
-    <button onclick="openModal()" class="btn-primary" style="width:100%;margin-top:20px;">
-      Novo Carro
-    </button>
+<div class="menu">
+<button onclick="openModal()">
+<i class="fas fa-plus"></i> Novo Carro
+</button>
+</div>
 
-    <button onclick="logout()" style="width:100%;margin-top:15px;">
-      Sair
-    </button>
-  </aside>
+<button class="btn-primary logout" onclick="logout()">
+Sair
+</button>
+</aside>
 
-  <main class="main">
+<main class="main">
 
-    <div class="top">
-      <h1>Estoque</h1>
-    </div>
+<div class="topbar">
+<h1>Estoque</h1>
 
-    <div class="cars-grid" id="carsGrid"></div>
+<button class="btn-primary" onclick="openModal()">
+<i class="fas fa-plus"></i> Novo Carro
+</button>
+</div>
 
-  </main>
+<div class="cars-grid" id="carsGrid"></div>
+
+</main>
 </div>
 
 <!-- MODAL -->
 <div class="modal" id="modal">
-  <div class="modal-box">
+<div class="modal-box">
 
-    <h2>Novo Carro</h2>
+<h2>Novo Veículo</h2>
 
-    <form id="carForm">
+<form id="carForm">
 
-      <div class="row">
-        <input type="text" id="carMarca" placeholder="Marca" required>
-        <input type="text" id="carModelo" placeholder="Modelo" required>
-      </div>
+<div class="row">
+<input type="text" id="carMarca" placeholder="Marca" required>
+<input type="text" id="carModelo" placeholder="Modelo" required>
+</div>
 
-      <div class="row">
-        <input type="number" id="carAno" placeholder="Ano" required>
-        <input type="text" id="carCor" placeholder="Cor" required>
-      </div>
+<div class="row">
+<input type="number" id="carAno" placeholder="Ano" required>
+<input type="text" id="carCor" placeholder="Cor" required>
+</div>
 
-      <div class="row">
-        <input type="number" id="carKm" placeholder="KM" required>
-        <input type="number" id="carValor" placeholder="Valor" required>
-      </div>
+<div class="row">
+<input type="number" id="carKm" placeholder="KM" required>
+<input type="number" id="carValor" placeholder="Valor" required>
+</div>
 
-      <textarea id="carDescricao" placeholder="Descrição"></textarea>
+<textarea id="carDescricao" rows="4" placeholder="Descrição"></textarea>
 
-      <input type="file" id="carPhotos" accept="image/*">
+<input type="file" id="carPhotos" accept="image/*">
 
-      <div id="photoGallery"></div>
+<div class="preview" id="photoGallery"></div>
 
-      <div style="display:flex;gap:10px;margin-top:20px;">
-        <button type="submit" class="btn-primary" style="flex:1;">
-          Salvar
-        </button>
+<div class="actions">
+<button type="submit" class="btn-primary" style="flex:1">
+Salvar
+</button>
 
-        <button type="button" onclick="closeModal()" style="flex:1;">
-          Cancelar
-        </button>
-      </div>
+<button type="button" onclick="closeModal()" style="flex:1">
+Cancelar
+</button>
+</div>
 
-    </form>
+</form>
 
-  </div>
+</div>
 </div>
 
 <script src="admin.js"></script>
