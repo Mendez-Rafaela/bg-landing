@@ -3,13 +3,18 @@
 ========================================================== */
 
 const API_URL = "https://api.bgcarmotors.com.br";
-let selectedFile = null;
-let editingCarId = null; // Variável para controlar se estamos editando
+let editingCarId = null;
+let photos = [];
+let mainPhoto = null;// Variável para controlar se estamos editando
 
-document.addEventListener("DOMContentLoaded", ( ) => {
+document.addEventListener("DOMContentLoaded", () => {
   initLogin();
-  initUpload();
   initForm();
+
+  const inputPhotos = document.getElementById("carFotos");
+  if (inputPhotos) {
+    initUpload(inputPhotos);
+  }
 });
 
 function initLogin() {
@@ -80,7 +85,9 @@ function initForm() {
     formData.append("km", document.getElementById("carKm").value);
     formData.append("price", document.getElementById("carValor").value);
     formData.append("description", document.getElementById("carDescricao").value);
-    if (selectedFile) formData.append("image", selectedFile);
+    
+    formData.append("main_image", mainPhoto || "");
+    formData.append("photos", JSON.stringify(photos));
 
     try {
       const url = editingCarId ? `${API_URL}/api/cars/${editingCarId}` : `${API_URL}/api/cars`;
@@ -114,7 +121,9 @@ window.editCar = async function (id) {
     document.getElementById("carKm").value = car.km;
     document.getElementById("carValor").value = car.price;
     document.getElementById("carDescricao").value = car.description || "";
-    document.getElementById("photoGallery").innerHTML = `<img src="${car.main_image}">`;
+    photos = car.photos || [];
+mainPhoto = car.main_image || photos[0] || null;
+renderGallery();
     openModal();
   } catch (error) { alert("Erro ao carregar dados do veículo."); }
 };
@@ -139,58 +148,74 @@ window.closeModal = () => {
   document.getElementById("modal").classList.remove("active");
   resetForm();
 };
+
 function initUpload(inputPhotos) {
-  inputPhotos.addEventListener('change', async (e) => {
+  inputPhotos.addEventListener("change", async (e) => {
     const files = e.target.files;
 
-    for (let file of files) {
+    if (!files || files.length === 0) return;
+
+    for (let i = 0; i < files.length; i++) {
+
+      if (photos.length >= 13) {
+        alert("Máximo de 13 fotos por veículo.");
+        break;
+      }
+
+      const file = files[i];
+
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append("file", file);
 
       try {
         const response = await fetch(`${API_URL}/upload`, {
-          method: 'POST',
+          method: "POST",
           body: formData
         });
 
-        if (!response.ok) throw new Error('Erro no upload');
-        
+        if (!response.ok) throw new Error();
+
         const data = await response.json();
+
         photos.push(data.url);
 
-        if (!mainPhoto && photos.length > 0) {
-          mainPhoto = photos[0];
+        if (!mainPhoto) {
+          mainPhoto = data.url;
         }
 
         renderGallery();
-      } catch (err) {
-        console.error('Erro upload:', err);
-        continue;
+
+      } catch (error) {
+        alert("Erro ao enviar imagem.");
       }
-    } // Fecha o loop for
-  }); // Fecha o EventListener
-} // Fecha a função initUpload
+    }
+
+    inputPhotos.value = "";
+  });
+}
 
 
 function renderGallery() {
   const gallery = document.getElementById('photoGallery');
   if (!gallery) return;
 
-  gallery.innerHTML = ''; // Limpa a galeria para redesenhar a lista atualizada
+  gallery.innerHTML = ''; // Limpa para mostrar a lista completa
 
   photos.forEach((photo, index) => {
     const isMain = photo === mainPhoto;
     const div = document.createElement('div');
     div.className = `gallery-item ${isMain ? 'main' : ''}`;
+    div.style.display = 'inline-block'; // Garante que fiquem lado a lado
+    div.style.position = 'relative';
 
     div.innerHTML = `
-      <img src="${photo}">
+      <img src="${photo}" style="width:100px; height:100px; object-fit:cover; margin:5px;">
       <button type="button" onclick="setMainPhoto('${photo}')"
-        style="position:absolute;bottom:5px;left:5px;">
-        ⭐
+        style="position:absolute; bottom:10px; left:10px; background:rgba(0,0,0,0.5); color:white; border:none; cursor:pointer;">
+        ${isMain ? '⭐' : 'Marcar'}
       </button>
-      <button type="button" class="gallery-item-remove"
-        onclick="removePhoto(${index})">
+      <button type="button" onclick="removePhoto(${index})"
+        style="position:absolute; top:10px; right:10px; background:red; color:white; border:none; border-radius:50%; width:20px; cursor:pointer;">
         ✕
       </button>
     `;
@@ -201,9 +226,12 @@ function renderGallery() {
 
 function resetForm() {
   editingCarId = null;
-  selectedFile = null;
+  photos = [];
+  mainPhoto = null;
+
   document.getElementById("carForm").reset();
   document.getElementById("photoGallery").innerHTML = "";
   document.querySelector(".modal-box h2").textContent = "Novo Veículo";
 }
+
 window.logout = () => location.reload();
