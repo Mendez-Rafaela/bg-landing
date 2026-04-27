@@ -925,3 +925,46 @@ td {
   border-radius: 12px;
   border: 1px solid var(--primary);
 }
+
+/* ============================================================
+   CARROSSEL DE IMAGENS - BGCAR MOTORS
+   (ADICIONAR NO FINAL DO style.css)
+   ============================================================ */
+
+/* Container da imagem do card */
+.car-img {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  background: #000;
+  border-radius: 0; /* mantém padrão do teu design */
+}
+
+/* Container do carrossel */
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Todas as imagens empilhadas */
+.carousel .slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+/* Imagem ativa */
+.carousel .slide.active {
+  opacity: 1;
+}
+
+/* Garantia para não quebrar layout do card */
+.car-card .car-img {
+  display: block;
+}
