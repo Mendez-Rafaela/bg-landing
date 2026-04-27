@@ -67,6 +67,15 @@ try {
                 
                 <div class="car-img">
                     <div class="carousel" id="carousel-${car.id}">
+    
+    ${photos.map((img, i) => `
+        <img src="${img}" class="slide ${i === 0 ? 'active' : ''}">
+    `).join('')}
+
+    <button class="carousel-btn prev" onclick="changeSlide(${car.id}, -1)">&#10094;</button>
+    <button class="carousel-btn next" onclick="changeSlide(${car.id}, 1)">&#10095;</button>
+
+</div>
                         ${photos.map((img, i) => `
                             <img src="${img}" class="slide ${i === 0 ? 'active' : ''}">
                         `).join('')}
