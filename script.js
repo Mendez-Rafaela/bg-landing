@@ -89,3 +89,5 @@ function initMobileMenu() {
         close.addEventListener('click', () => menu.classList.remove('open'));
     }
 }
+    }
+}
