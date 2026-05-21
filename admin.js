@@ -205,28 +205,107 @@ function initUpload(inputPhotos) {
 
 function renderGallery() {
   const gallery = document.getElementById('photoGallery');
+
   if (!gallery) return;
+
   gallery.innerHTML = '';
 
   photos.forEach((photo, index) => {
+
     const isMain = photo === mainPhoto;
+
     const div = document.createElement('div');
+
     div.className = `gallery-item ${isMain ? 'main' : ''}`;
+
     div.style.display = 'inline-block';
     div.style.position = 'relative';
     div.style.margin = '5px';
+    div.style.textAlign = 'center';
 
     div.innerHTML = `
-      <img src="${photo}" style="width:100px; height:100px; object-fit:cover; border: ${isMain ? '3px solid #e21818' : '1px solid #333'};">
-      <button type="button" onclick="setMainPhoto('${photo}')"
-        style="position:absolute; bottom:5px; left:5px; background:rgba(0,0,0,0.7); color:white; border:none; cursor:pointer; padding: 2px 5px; font-size: 10px;">
-        ${isMain ? 'PRINCIPAL ⭐' : 'MARCAR'}
-      </button>
-      <button type="button" onclick="removePhoto(${index})"
-        style="position:absolute; top:5px; right:5px; background:#e21818; color:white; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size: 12px;">
-        ✕
-      </button>
+      <img 
+        src="${photo}" 
+        style="
+          width:100px;
+          height:100px;
+          object-fit:cover;
+          border:${isMain ? '3px solid #e21818' : '1px solid #333'};
+          border-radius:8px;
+        "
+      >
+
+      <div style="
+        display:flex;
+        gap:4px;
+        margin-top:5px;
+        justify-content:center;
+        flex-wrap:wrap;
+      ">
+
+        <button
+          type="button"
+          onclick="movePhotoLeft(${index})"
+          style="
+            background:#222;
+            color:white;
+            border:none;
+            padding:3px 6px;
+            cursor:pointer;
+            border-radius:4px;
+          "
+        >
+          ⬅
+        </button>
+
+        <button
+          type="button"
+          onclick="movePhotoRight(${index})"
+          style="
+            background:#222;
+            color:white;
+            border:none;
+            padding:3px 6px;
+            cursor:pointer;
+            border-radius:4px;
+          "
+        >
+          ➡
+        </button>
+
+        <button
+          type="button"
+          onclick="setMainPhoto('${photo}')"
+          style="
+            background:rgba(0,0,0,0.7);
+            color:white;
+            border:none;
+            cursor:pointer;
+            padding:3px 6px;
+            border-radius:4px;
+          "
+        >
+          ${isMain ? 'PRINCIPAL ⭐' : 'CAPA'}
+        </button>
+
+        <button
+          type="button"
+          onclick="removePhoto(${index})"
+          style="
+            background:#e21818;
+            color:white;
+            border:none;
+            cursor:pointer;
+            padding:3px 6px;
+            border-radius:4px;
+          "
+        >
+          ✕
+        </button>
+
+      </div>
     `;
+
     gallery.appendChild(div);
   });
 }
@@ -255,5 +334,25 @@ function resetForm() {
   const title = document.querySelector(".modal-box h2");
   if (title) title.textContent = "Novo Veículo";
 }
+
+window.movePhotoLeft = (index) => {
+
+  if (index === 0) return;
+
+  [photos[index - 1], photos[index]] =
+  [photos[index], photos[index - 1]];
+
+  renderGallery();
+};
+
+window.movePhotoRight = (index) => {
+
+  if (index === photos.length - 1) return;
+
+  [photos[index + 1], photos[index]] =
+  [photos[index], photos[index + 1]];
+
+  renderGallery();
+};
 
 window.logout = () => location.reload();
