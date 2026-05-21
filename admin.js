@@ -2,7 +2,7 @@
    BGCAR Motors - Admin (Sincronizado com VPS v13)
 ========================================================== */
 
-const API_URL = "https://api.bgcarmotors.com.br/cars";
+const API_URL = "https://api.bgcarmotors.com.br";
 let editingCarId = null;
 let photos = [];
 let mainPhoto = null;
